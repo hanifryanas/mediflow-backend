@@ -3,7 +3,7 @@ import { Exclude } from 'class-transformer';
 import { differenceInYears } from 'date-fns';
 import { Patient } from 'modules/patient/entities/patient.entity';
 import { Column, CreateDateColumn, Entity, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
-import { UserGenderType } from '../enums/user-gender.enum';
+import { UserGenderType } from '../enums';
 
 @Entity('User')
 export class User {
