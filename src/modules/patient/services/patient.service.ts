@@ -1,7 +1,6 @@
 // set the patient service like user service does
 
 import { InjectRepository } from '@nestjs/typeorm';
-import { FilterUserDto } from 'modules/user/dtos';
 import { Repository } from 'typeorm';
 import { CreatePatientDto, FilterPatientDto, UpdatePatientDto } from '../dtos';
 import { Patient } from '../entities';
@@ -20,23 +19,15 @@ export class PatientService {
     return await this.patientRepository.findOneBy({ [patientField]: patientValue });
   }
 
-  async findBy(filterPatientDto: FilterPatientDto | FilterUserDto): Promise<Patient[]> {
-    if ('insuranceProvider' in filterPatientDto) {
-      return await this.patientRepository.find({
-        where: {
-          insuranceProvider: filterPatientDto.insuranceProvider,
-        },
-      });
-    }
-
-    const { userName, identityNumber, email, phoneNumber } = filterPatientDto as FilterUserDto;
+  async findBy(filterPatientDto: FilterPatientDto): Promise<Patient[]> {
     return await this.patientRepository.find({
       where: {
+        insuranceProvider: filterPatientDto.insuranceProvider,
         user: {
-          userName,
-          identityNumber,
-          email,
-          phoneNumber,
+          identityNumber: filterPatientDto.identityNumber,
+          userName: filterPatientDto.userName,
+          email: filterPatientDto.email,
+          phoneNumber: filterPatientDto.phoneNumber,
         },
       },
       relations: ['user'],
