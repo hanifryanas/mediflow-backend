@@ -1,9 +1,11 @@
 import { ApiHideProperty } from '@nestjs/swagger';
+import { hashSync } from 'bcryptjs';
 import { Exclude } from 'class-transformer';
 import { differenceInYears } from 'date-fns';
 import { Patient } from 'modules/patient/entities/patient.entity';
-import { Column, CreateDateColumn, Entity, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
-import { UserGenderType } from '../enums';
+import { AfterLoad, BeforeInsert, BeforeUpdate, Column, CreateDateColumn, Entity, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { UserGenderType, UserRole } from '../enums';
+import { UserToken } from './user-token.entity';
 
 @Entity('User')
 export class User {
@@ -23,6 +25,23 @@ export class User {
   @Exclude({ toPlainOnly: true })
   @ApiHideProperty()
   password: string;
+
+  @Exclude({ toPlainOnly: true })
+  @ApiHideProperty()
+  private tempPassword?: string;
+
+  @AfterLoad()
+  private loadTempPassword(): void {
+    this.tempPassword = this.password;
+  }
+
+  @BeforeInsert()
+  @BeforeUpdate()
+  private hashPassword(): void {
+    if (this.tempPassword !== this.password) {
+      this.password = hashSync(this.password, 10);
+    }
+  }
 
   @Column({ length: 25 })
   firstName: string;
@@ -49,10 +68,18 @@ export class User {
   @Column({ nullable: true })
   address?: string;
 
+  @Column({ type: 'enum', enum: UserRole, default: UserRole.User })
+  @Exclude({ toPlainOnly: true })
+  role: UserRole;
+
+  @Exclude({ toPlainOnly: true })
+  @ApiHideProperty()
+  @OneToMany(() => UserToken, (token) => token.user, { cascade: true })
+  tokens?: UserToken[];
+
   @CreateDateColumn()
   createdAt: Date;
 
   @UpdateDateColumn()
   updatedAt: Date;
-
 }

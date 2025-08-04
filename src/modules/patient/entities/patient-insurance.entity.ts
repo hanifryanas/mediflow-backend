@@ -7,7 +7,7 @@ export class PatientInsurance {
   @PrimaryGeneratedColumn('identity')
   patientInsuranceId: number;
 
-  @ManyToOne(() => Patient, (patient) => patient.insurances)
+  @ManyToOne(() => Patient, (patient) => patient.insurances, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'patientId' })
   patient: Patient;
 

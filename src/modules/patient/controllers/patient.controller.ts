@@ -29,7 +29,7 @@ export class PatientController {
 
   @Post()
   async create(@Body() createPatientDto: CreatePatientDto): Promise<number> {
-    const user = await this.userService.findOneBy('userId', createPatientDto.userId);
+    const user = await this.userService.findOneBy({ userId: createPatientDto.userId });
 
     if (!user) {
       throw new NotFoundException(`User with ID ${createPatientDto.userId} not found`);
