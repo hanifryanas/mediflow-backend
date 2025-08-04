@@ -1,24 +1,9 @@
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsEnum, IsNotEmpty, IsOptional, IsString } from 'class-validator';
-import { Patient } from '../entities';
-import { InsuranceProviderType } from '../enums';
+import { ApiProperty } from '@nestjs/swagger';
+import { IsNotEmpty, IsString } from 'class-validator';
 
-export class CreatePatientDto implements Partial<Patient> {
+export class CreatePatientDto {
   @ApiProperty()
   @IsString()
   @IsNotEmpty()
   userId: string;
-
-  @ApiPropertyOptional({
-    enum: InsuranceProviderType,
-    enumName: 'InsuranceProviderType',
-  })
-  @IsEnum(InsuranceProviderType)
-  @IsOptional()
-  insuranceProvider?: InsuranceProviderType;
-
-  @ApiPropertyOptional()
-  @IsString()
-  @IsOptional()
-  insurancePolicyNumber?: string;
 }

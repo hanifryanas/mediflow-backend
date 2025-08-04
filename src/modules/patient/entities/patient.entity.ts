@@ -1,6 +1,6 @@
 import { User } from 'modules/user/entities/user.entity';
-import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { InsuranceProviderType } from '../enums';
+import { Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { PatientInsurance } from './patient-insurance.entity';
 
 @Entity('Patient')
 export class Patient {
@@ -10,12 +10,9 @@ export class Patient {
   @OneToOne(() => User, (user) => user.userId, {
     onDelete: 'CASCADE',
   })
-  @JoinColumn()
+  @JoinColumn({ name: 'userId' })
   user: User;
 
-  @Column({ type: 'enum', enum: InsuranceProviderType, nullable: true })
-  insuranceProvider?: InsuranceProviderType;
-
-  @Column({ nullable: true })
-  insurancePolicyNumber?: string;
+  @OneToMany(() => PatientInsurance, (insurance) => insurance.patient, { cascade: true })
+  insurances?: PatientInsurance[];
 }

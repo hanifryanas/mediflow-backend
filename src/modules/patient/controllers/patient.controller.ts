@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, NotFoundException, Param, Post, Put, Query } from '@nestjs/common';
+import { Body, Controller, Delete, Get, NotFoundException, Param, Post, Query } from '@nestjs/common';
 import { UserService } from 'modules/user/services';
 import { CreatePatientDto, FilterPatientDto } from '../dtos';
 import { Patient } from '../entities';
@@ -17,7 +17,7 @@ export class PatientController {
   }
 
   @Get(':patientId')
-  async findOne(@Param('patientId') patientId: string): Promise<Patient | null> {
+  async findOne(@Param('patientId') patientId: number): Promise<Patient | null> {
     const patient = await this.patientService.findOneBy('patientId', patientId);
 
     if (!patient) {
@@ -35,18 +35,12 @@ export class PatientController {
       throw new NotFoundException(`User with ID ${createPatientDto.userId} not found`);
     }
 
-    return await this.patientService.create(createPatientDto);
-  }
+    const createPatient = {
+      ...createPatientDto,
+      user: user,
+    };
 
-  @Put(':patientId')
-  async update(@Param('patientId') patientId: string, @Body() updatePatientDto: CreatePatientDto): Promise<void> {
-    const patient = await this.patientService.findOneBy('patientId', patientId);
-
-    if (!patient) {
-      throw new NotFoundException(`Patient with ID ${patientId} not found`);
-    }
-
-    await this.patientService.update(Number(patientId), updatePatientDto);
+    return await this.patientService.create(createPatient);
   }
 
   @Delete(':patientId')
