@@ -21,7 +21,7 @@ export class User {
   @Column({ length: 25, unique: true })
   userName: string;
 
-  @Column({ length: 16, select: false })
+  @Column({ select: false })
   @Exclude({ toPlainOnly: true })
   @ApiHideProperty()
   password: string;
