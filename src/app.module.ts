@@ -1,6 +1,7 @@
 
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { JwtModule } from '@nestjs/jwt';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { tokenConfig } from 'config';
 import { dataSourceOptions } from 'database/data-source';
@@ -13,6 +14,16 @@ import { PatientModule, UserModule } from 'modules';
         tokenConfig,
       ],
       cache: true,
+    }),
+    JwtModule.registerAsync({
+      imports: [ConfigModule],
+      useFactory: async (configService: ConfigService) => ({
+        secret: configService.get<string>('token.accessTokenSecret'),
+        signOptions: {
+          expiresIn: `${configService.get<number>('token.accessTokenExpiration')}h`,
+        },
+      }),
+      inject: [ConfigService],
     }),
     TypeOrmModule.forRoot(dataSourceOptions),
     PatientModule,

@@ -3,12 +3,15 @@ import { compareSync } from 'bcryptjs';
 import { isNullOrUndefined } from 'common/functions';
 import { CreateUserDto, FilterUserDto, LoginUserDto, LogoutUserDto, UpdateUserDto } from '../dtos';
 import { User } from '../entities';
-import { UserService } from '../services';
+import { UserAuthService, UserService } from '../services';
 
 
 @Controller('users')
 export class UserController {
-  constructor(private readonly userService: UserService) { }
+  constructor(
+    private readonly userService: UserService,
+    private readonly userAuthService: UserAuthService,
+  ) { }
 
   @Get()
   async findAll(@Query() query: FilterUserDto): Promise<User[]> {
@@ -52,7 +55,7 @@ export class UserController {
       throw new MethodNotAllowedException('Invalid password');
     }
 
-    const accessToken = await this.userService.login(user);
+    const accessToken = await this.userAuthService.login(user);
 
     if (isNullOrUndefined(accessToken)) {
       throw new MethodNotAllowedException('Login failed');
@@ -63,7 +66,7 @@ export class UserController {
 
   @Post('/logout')
   async logout(@Body() logoutUserDto: LogoutUserDto): Promise<void> {
-    await this.userService.logout(logoutUserDto.userId);
+    await this.userAuthService.logout(logoutUserDto.userId);
   }
 
   @Put(':userId')
