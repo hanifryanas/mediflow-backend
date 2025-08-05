@@ -1,6 +1,6 @@
 import { ApiHideProperty } from '@nestjs/swagger';
 import { hashSync } from 'bcryptjs';
-import { Exclude } from 'class-transformer';
+import { Exclude, Expose } from 'class-transformer';
 import { differenceInYears } from 'date-fns';
 import { Patient } from 'modules/patient/entities/patient.entity';
 import { AfterLoad, BeforeInsert, BeforeUpdate, Column, CreateDateColumn, Entity, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
@@ -58,6 +58,7 @@ export class User {
   @Column({ type: 'date' })
   dateOfBirth: Date;
 
+  @Expose()
   get age(): number {
     return differenceInYears(new Date(), new Date(this.dateOfBirth));
   }

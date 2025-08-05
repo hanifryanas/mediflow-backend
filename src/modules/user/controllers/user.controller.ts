@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, MethodNotAllowedException, NotFoundException, Param, Post, Put, Query } from '@nestjs/common';
+import { Body, ClassSerializerInterceptor, Controller, Delete, Get, MethodNotAllowedException, NotFoundException, Param, Post, Put, Query, UseInterceptors } from '@nestjs/common';
 import { compareSync } from 'bcryptjs';
 import { isNullOrUndefined } from 'common/functions';
 import { CreateUserDto, FilterUserDto, LoginUserDto, LogoutUserDto, UpdateUserDto } from '../dtos';
@@ -7,6 +7,7 @@ import { UserAuthService, UserService } from '../services';
 
 
 @Controller('users')
+@UseInterceptors(ClassSerializerInterceptor)
 export class UserController {
   constructor(
     private readonly userService: UserService,
