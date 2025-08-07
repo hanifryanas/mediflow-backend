@@ -1,10 +1,12 @@
 import { Body, Controller, Delete, Get, NotFoundException, Param, Post, Put } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { isNullOrUndefined } from 'common/functions';
 import { CreatePatientInsuranceDto } from '../dtos';
 import { PatientInsurance } from '../entities';
 import { PatientInsuranceService, PatientService } from '../services';
 
 @Controller('patients/:patientId/insurances')
+@ApiTags('Patient Insurances')
 export class PatientInsuranceController {
   constructor(
     private readonly patientInsuranceService: PatientInsuranceService,

@@ -4,9 +4,11 @@ import { isNullOrUndefined } from 'common/functions';
 import { CreateUserDto, FilterUserDto, LoginUserDto, LogoutUserDto, UpdateUserDto } from '../dtos';
 import { User } from '../entities';
 import { UserAuthService, UserService } from '../services';
+import { ApiTags } from '@nestjs/swagger';
 
 
 @Controller('users')
+@ApiTags('Users')
 @UseInterceptors(ClassSerializerInterceptor)
 export class UserController {
   constructor(

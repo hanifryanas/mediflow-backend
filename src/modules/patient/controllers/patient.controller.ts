@@ -1,10 +1,12 @@
 import { Body, Controller, Delete, Get, NotFoundException, Param, Post, Query } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { UserService } from 'modules/user/services';
 import { CreatePatientDto, FilterPatientDto } from '../dtos';
 import { Patient } from '../entities';
 import { PatientService } from '../services/patient.service';
 
 @Controller('patients')
+@ApiTags('Patients')
 export class PatientController {
   constructor(
     private readonly patientService: PatientService,
