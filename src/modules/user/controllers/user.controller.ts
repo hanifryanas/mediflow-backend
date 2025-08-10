@@ -1,10 +1,10 @@
 import { Body, ClassSerializerInterceptor, Controller, Delete, Get, MethodNotAllowedException, NotFoundException, Param, Post, Put, Query, UseInterceptors } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { compareSync } from 'bcryptjs';
 import { isNullOrUndefined } from 'common/functions';
 import { CreateUserDto, FilterUserDto, LoginUserDto, LogoutUserDto, UpdateUserDto } from '../dtos';
 import { User } from '../entities';
 import { UserAuthService, UserService } from '../services';
-import { ApiTags } from '@nestjs/swagger';
 
 
 @Controller('users')
@@ -43,10 +43,15 @@ export class UserController {
 
   @Post('/login')
   async login(@Body() loginDto: LoginUserDto): Promise<string> {
-    const user = await this.userService.findOneBy({
-      email: loginDto.emailOrUsername,
+    const userByUsername = await this.userService.findOneBy({
       userName: loginDto.emailOrUsername,
     }, ['userId', 'email', 'userName', 'password']);
+
+    const userByEmail = await this.userService.findOneBy({
+      email: loginDto.emailOrUsername,
+    }, ['userId', 'email', 'userName', 'password']);
+
+    const user = userByUsername || userByEmail;
 
     if (!user) {
       throw new MethodNotAllowedException(`User with email or username ${loginDto.emailOrUsername} is not registered`);
