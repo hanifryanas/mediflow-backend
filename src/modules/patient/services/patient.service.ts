@@ -1,7 +1,7 @@
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { FilterPatientDto } from '../dtos';
-import { Patient } from '../entities';
+import { FilterPatientDto } from '../dtos/filter-patient.dto';
+import { Patient } from '../entities/patient.entity';
 
 export class PatientService {
   constructor(

@@ -1,6 +1,6 @@
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { PatientInsurance } from '../entities';
+import { PatientInsurance } from '../entities/patient-insurance.entity';
 
 export class PatientInsuranceService {
   constructor(

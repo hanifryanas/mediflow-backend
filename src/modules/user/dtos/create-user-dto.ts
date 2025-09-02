@@ -1,8 +1,8 @@
 import { faker } from '@faker-js/faker';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { IsDate, IsEnum, IsNotEmpty, IsOptional, IsString } from 'class-validator';
-import { User } from '../entities';
-import { UserGenderType } from '../enums';
+import { User } from '../entities/user.entity';
+import { UserGenderType } from '../enums/user-gender.enum';
 
 const exampleGender = faker.helpers.arrayElement(Object.values(UserGenderType)) as UserGenderType;
 const exampleIdentityNumber = faker.string.numeric(16);

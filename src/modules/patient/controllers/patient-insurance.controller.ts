@@ -1,9 +1,10 @@
 import { Body, Controller, Delete, Get, NotFoundException, Param, Post, Put } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { isNullOrUndefined } from 'common/functions';
-import { CreatePatientInsuranceDto } from '../dtos';
-import { PatientInsurance } from '../entities';
-import { PatientInsuranceService, PatientService } from '../services';
+import { CreatePatientInsuranceDto } from '../dtos/create-patient-insurance.dto';
+import { PatientInsurance } from '../entities/patient-insurance.entity';
+import { PatientInsuranceService } from '../services/patient-insurance.service';
+import { PatientService } from '../services/patient.service';
 
 @Controller('patients/:patientId/insurances')
 @ApiTags('Patient Insurances')

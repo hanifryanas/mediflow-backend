@@ -1,5 +1,5 @@
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { InsuranceProviderType } from '../enums';
+import { InsuranceProviderType } from '../enums/insurance-provider.enum';
 import { Patient } from './patient.entity';
 
 @Entity('PatientInsurance')

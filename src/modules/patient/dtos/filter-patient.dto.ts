@@ -1,7 +1,7 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import { IsEnum, IsOptional } from 'class-validator';
-import { FilterUserDto } from 'modules/user/dtos';
-import { InsuranceProviderType } from '../enums';
+import { FilterUserDto } from 'modules/user/dtos/filter-user.dto';
+import { InsuranceProviderType } from '../enums/insurance-provider.enum';
 
 export class FilterPatientDto extends FilterUserDto {
   @ApiPropertyOptional({

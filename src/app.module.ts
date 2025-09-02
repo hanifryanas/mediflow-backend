@@ -1,12 +1,13 @@
 
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { JwtModule } from '@nestjs/jwt';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { databaseConfig, tokenConfig } from 'config';
-import 'dotenv/config';
-import { PatientModule, UserModule } from 'modules';
+import { PatientModule } from 'modules/patient/patient.module';
+import { UserModule } from 'modules/user/user.module';
 import { join } from 'path';
+import { AuthModule } from './modules/auth/auth.module';
+
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -15,16 +16,6 @@ import { join } from 'path';
         tokenConfig,
       ],
       cache: true,
-    }),
-    JwtModule.registerAsync({
-      imports: [ConfigModule],
-      useFactory: async (configService: ConfigService) => ({
-        secret: configService.get<string>('token.accessTokenSecret'),
-        signOptions: {
-          expiresIn: `${configService.get<number>('token.accessTokenExpiration')}h`,
-        },
-      }),
-      inject: [ConfigService],
     }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
@@ -41,8 +32,9 @@ import { join } from 'path';
       }),
       inject: [ConfigService],
     }),
-    PatientModule,
+    AuthModule,
     UserModule,
+    PatientModule,
   ],
   controllers: [],
   providers: [],

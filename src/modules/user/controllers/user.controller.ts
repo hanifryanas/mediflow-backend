@@ -1,10 +1,11 @@
-import { Body, ClassSerializerInterceptor, Controller, Delete, Get, MethodNotAllowedException, NotFoundException, Param, Post, Put, Query, UseInterceptors } from '@nestjs/common';
+import { Body, ClassSerializerInterceptor, Controller, Delete, Get, NotFoundException, Param, Post, Put, Query, UseInterceptors } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { compareSync } from 'bcryptjs';
 import { isNullOrUndefined } from 'common/functions';
-import { CreateUserDto, FilterUserDto, LoginUserDto, LogoutUserDto, UpdateUserDto } from '../dtos';
-import { User } from '../entities';
-import { UserAuthService, UserService } from '../services';
+import { CreateUserDto } from '../dtos/create-user-dto';
+import { FilterUserDto } from '../dtos/filter-user.dto';
+import { UpdateUserDto } from '../dtos/update-user-dto';
+import { User } from '../entities/user.entity';
+import { UserService } from '../services/user.service';
 
 
 @Controller('users')
@@ -13,7 +14,6 @@ import { UserAuthService, UserService } from '../services';
 export class UserController {
   constructor(
     private readonly userService: UserService,
-    private readonly userAuthService: UserAuthService,
   ) { }
 
   @Get()
@@ -39,42 +39,6 @@ export class UserController {
   @Post()
   async create(@Body() createUserDto: CreateUserDto): Promise<string> {
     return await this.userService.create(createUserDto);
-  }
-
-  @Post('/login')
-  async login(@Body() loginDto: LoginUserDto): Promise<string> {
-    const userByUsername = await this.userService.findOneBy({
-      userName: loginDto.emailOrUsername,
-    }, ['userId', 'email', 'userName', 'password']);
-
-    const userByEmail = await this.userService.findOneBy({
-      email: loginDto.emailOrUsername,
-    }, ['userId', 'email', 'userName', 'password']);
-
-    const user = userByUsername || userByEmail;
-
-    if (!user) {
-      throw new MethodNotAllowedException(`User with email or username ${loginDto.emailOrUsername} is not registered`);
-    }
-
-    const isPasswordValid = compareSync(loginDto.password, user.password);
-
-    if (!isPasswordValid) {
-      throw new MethodNotAllowedException('Invalid password');
-    }
-
-    const accessToken = await this.userAuthService.login(user);
-
-    if (isNullOrUndefined(accessToken)) {
-      throw new MethodNotAllowedException('Login failed');
-    }
-
-    return accessToken;
-  }
-
-  @Post('/logout')
-  async logout(@Body() logoutUserDto: LogoutUserDto): Promise<void> {
-    await this.userAuthService.logout(logoutUserDto.userId);
   }
 
   @Put(':userId')

@@ -1,8 +1,9 @@
 import { Body, Controller, Delete, Get, NotFoundException, Param, Post, Query } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { UserService } from 'modules/user/services';
-import { CreatePatientDto, FilterPatientDto } from '../dtos';
-import { Patient } from '../entities';
+import { UserService } from 'modules/user/services/user.service';
+import { CreatePatientDto } from '../dtos/create-patient.dto';
+import { FilterPatientDto } from '../dtos/filter-patient.dto';
+import { Patient } from '../entities/patient.entity';
 import { PatientService } from '../services/patient.service';
 
 @Controller('patients')

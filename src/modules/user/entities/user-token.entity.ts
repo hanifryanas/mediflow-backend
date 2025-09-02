@@ -1,5 +1,5 @@
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { UserTokenType } from '../enums';
+import { UserTokenType } from '../enums/user-token.enum';
 import { User } from './user.entity';
 
 @Entity('UserToken')

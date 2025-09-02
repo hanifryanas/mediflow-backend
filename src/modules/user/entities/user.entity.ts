@@ -4,7 +4,8 @@ import { Exclude, Expose } from 'class-transformer';
 import { differenceInYears } from 'date-fns';
 import { Patient } from 'modules/patient/entities/patient.entity';
 import { AfterLoad, BeforeInsert, BeforeUpdate, Column, CreateDateColumn, Entity, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
-import { UserGenderType, UserRole } from '../enums';
+import { UserGenderType } from '../enums/user-gender.enum';
+import { UserRole } from '../enums/user-role.enum';
 import { UserToken } from './user-token.entity';
 
 @Entity('User')

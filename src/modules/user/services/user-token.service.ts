@@ -3,8 +3,8 @@ import { JwtService, JwtSignOptions } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { addHours } from 'date-fns';
 import { Repository } from 'typeorm';
-import { UserToken } from '../entities';
-import { UserTokenType } from '../enums';
+import { UserToken } from '../entities/user-token.entity';
+import { UserTokenType } from '../enums/user-token.enum';
 
 export class UserTokenService {
   constructor(
