@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { compareSync } from 'bcryptjs';
 import { LoginDto } from 'modules/auth/dtos/login.dto';
@@ -19,22 +19,34 @@ export class UserService {
     return await this.userRepository.find();
   }
 
-  async findOneBy(partialUser: Partial<User>, selection?: (keyof User)[]): Promise<User | null> {
-    return await this.userRepository.findOne({ where: partialUser, select: selection });
+  async findBy(partialUser: Partial<User>): Promise<User[]> {
+    return await this.userRepository.findBy(partialUser);
   }
 
-  async findOneByEmailOrUsername(identifier: string, selection?: (keyof User)[]): Promise<User | null> {
-    return await this.userRepository.findOne({
+  async findOneBy(partialUser: Partial<User>, selection?: (keyof User)[]): Promise<User> {
+    const user = await this.userRepository.findOne({ where: partialUser, select: selection });
+
+    if (!user) {
+      throw new NotFoundException(`User not found`);
+    }
+
+    return user;
+  }
+
+  async findOneByEmailOrUsername(identifier: string, selection?: (keyof User)[]): Promise<User> {
+    const user = await this.userRepository.findOne({
       where: [
         { email: identifier },
         { userName: identifier },
       ],
       select: selection,
     });
-  }
 
-  async findBy(partialUser: Partial<User>): Promise<User[]> {
-    return await this.userRepository.findBy(partialUser);
+    if (!user) {
+      throw new NotFoundException(`User with email or username ${identifier} not found`);
+    }
+
+    return user;
   }
 
   async validateUserCredential(loginDto: LoginDto): Promise<ISigninData> {
@@ -63,14 +75,26 @@ export class UserService {
 
     const createdUser = await this.userRepository.save(user);
 
+    if (!createdUser) {
+      throw new BadRequestException('User creation failed');
+    }
+
     return createdUser.userId;
   }
 
   async update(userId: string, updateUserDto: UpdateUserDto): Promise<void> {
-    await this.userRepository.update(userId, updateUserDto);
+    const result = await this.userRepository.update(userId, updateUserDto);
+
+    if (!result.affected) {
+      throw new BadRequestException(`Failed to update user with ID ${userId}`);
+    }
   }
 
   async delete(userId: string): Promise<void> {
-    await this.userRepository.delete(userId);
+    const result = await this.userRepository.delete(userId);
+
+    if (!result.affected) {
+      throw new BadRequestException(`Failed to delete user with ID ${userId}`);
+    }
   }
 }

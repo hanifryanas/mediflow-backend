@@ -1,3 +1,4 @@
+import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { FilterPatientDto } from '../dtos/filter-patient.dto';
@@ -11,10 +12,6 @@ export class PatientService {
 
   async findAll(): Promise<Patient[]> {
     return await this.patientRepository.find();
-  }
-
-  async findOneBy(patientField: keyof Patient, patientValue: Patient[keyof Patient]): Promise<Patient | null> {
-    return await this.patientRepository.findOneBy({ [patientField]: patientValue });
   }
 
   async findBy(filterPatientDto: FilterPatientDto): Promise<Patient[]> {
@@ -34,14 +31,33 @@ export class PatientService {
     });
   }
 
+  async findOneBy(patientField: keyof Patient, patientValue: Patient[keyof Patient]): Promise<Patient> {
+    const patient = await this.patientRepository.findOneBy({ [patientField]: patientValue });
+
+    if (!patient) {
+      throw new NotFoundException(`Patient with ${patientField} ${patientValue} not found`);
+    }
+
+    return patient;
+  }
+
+
   async create(patient: Partial<Patient>): Promise<number> {
     const createPatientDto = this.patientRepository.create(patient);
     const createdPatient = await this.patientRepository.save(createPatientDto);
+
+    if (!createdPatient) {
+      throw new BadRequestException('Failed to create patient');
+    }
 
     return createdPatient.patientId;
   }
 
   async delete(patientId: number): Promise<void> {
-    await this.patientRepository.delete(patientId);
+    const result = await this.patientRepository.delete(patientId);
+
+    if (!result.affected) {
+      throw new BadRequestException(`Failed to delete patient with ID ${patientId}`);
+    }
   }
 }
