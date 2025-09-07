@@ -1,8 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { LoginDto } from 'modules/auth/dtos/login.dto';
 import { ISigninData } from 'modules/auth/interfaces/signin-data.interface';
 import { CreateUserDto } from 'modules/user/dtos/create-user-dto';
+import { User } from 'modules/user/entities/user.entity';
 import { UserTokenType } from 'modules/user/enums/user-token.enum';
 import { UserTokenService } from 'modules/user/services/user-token.service';
 import { UserService } from 'modules/user/services/user.service';
@@ -39,6 +40,16 @@ export class AuthService {
     };
 
     return this.login(loginDto);
+  }
+
+  async me(userId: string): Promise<User> {
+    const user = await this.userService.findOneBy({ userId });
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    return user;
   }
 
   async logout(userId: string): Promise<void> {

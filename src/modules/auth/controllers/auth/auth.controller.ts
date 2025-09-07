@@ -1,8 +1,10 @@
-import { Controller, Get, Post, Req } from '@nestjs/common';
+import { Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
 import { LoginDto } from 'modules/auth/dtos/login.dto';
+import { JwtAuthGuard } from 'modules/auth/guards/jwt.guard';
 import { ISigninData } from 'modules/auth/interfaces/signin-data.interface';
 import { AuthService } from 'modules/auth/services/auth/auth.service';
 import { CreateUserDto } from 'modules/user/dtos/create-user-dto';
+import { User } from 'modules/user/entities/user.entity';
 
 @Controller('auth')
 export class AuthController {
@@ -21,13 +23,14 @@ export class AuthController {
   }
 
   @Get('/me')
-  async getProfile(@Req() req): Promise<void> {
+  @UseGuards(JwtAuthGuard)
+  async getProfile(@Req() req): Promise<User> {
     const userId = req.user.id;
-
-    return userId;
+    return this.authService.me(userId);
   }
 
   @Post('/logout')
+  @UseGuards(JwtAuthGuard)
   async logout(@Req() req): Promise<void> {
     const userId = req.user.id;
     return this.authService.logout(userId);
