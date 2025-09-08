@@ -15,15 +15,9 @@ async function bootstrap() {
 
   const document = SwaggerModule.createDocument(app, swaggerConfig);
   SwaggerModule.setup('api/docs', app, document, {
-    swaggerOptions: {
-      persistAuthorization: true,
-    },
     customSiteTitle: 'Mediflow API Documentation',
     customCss: `
-      .swagger-ui .topbar { display: none; }
-      .swagger-ui .scheme-container { display: none; }
       .swagger-ui .opblock-tag.no-desc span { color: #333; }
-      .swagger-ui .opblock-summary-description { display: none; }
     `,
   });
 
