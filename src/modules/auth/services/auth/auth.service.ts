@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import { LoginDataDto } from 'modules/auth/dtos/login-data.dto';
 import { LoginDto } from 'modules/auth/dtos/login.dto';
-import { ISigninData } from 'modules/auth/interfaces/signin-data.interface';
 import { CreateUserDto } from 'modules/user/dtos/create-user-dto';
 import { User } from 'modules/user/entities/user.entity';
 import { UserTokenType } from 'modules/user/enums/user-token.enum';
@@ -16,14 +16,14 @@ export class AuthService {
     private readonly userTokenService: UserTokenService,
   ) { }
 
-  async login(loginDto: LoginDto): Promise<ISigninData> {
+  async login(loginDto: LoginDto): Promise<LoginDataDto> {
     const validatedUser = await this.userService.validateUserCredential(loginDto);
 
     const createdAccessToken = this.jwtService.sign(validatedUser);
 
     await this.userTokenService.createRefreshToken(validatedUser.userId);
 
-    const signinData: ISigninData = {
+    const signinData: LoginDataDto = {
       ...validatedUser,
       accessToken: createdAccessToken,
     };
@@ -31,7 +31,7 @@ export class AuthService {
     return signinData;
   }
 
-  async signup(createUserDto: CreateUserDto): Promise<ISigninData> {
+  async signup(createUserDto: CreateUserDto): Promise<LoginDataDto> {
     await this.userService.create(createUserDto);
 
     const loginDto: LoginDto = {

@@ -1,8 +1,8 @@
 import { Body, ClassSerializerInterceptor, Controller, Get, Post, Req, UseGuards, UseInterceptors } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { LoginDataDto } from 'modules/auth/dtos/login-data.dto';
 import { LoginDto } from 'modules/auth/dtos/login.dto';
 import { JwtAuthGuard } from 'modules/auth/guards/jwt.guard';
-import { ISigninData } from 'modules/auth/interfaces/signin-data.interface';
 import { AuthService } from 'modules/auth/services/auth/auth.service';
 import { CreateUserDto } from 'modules/user/dtos/create-user-dto';
 import { User } from 'modules/user/entities/user.entity';
@@ -16,12 +16,12 @@ export class AuthController {
   ) { }
 
   @Post('/signup')
-  async signup(@Body() createUserDto: CreateUserDto): Promise<ISigninData> {
+  async signup(@Body() createUserDto: CreateUserDto): Promise<LoginDataDto> {
     return this.authService.signup(createUserDto);
   }
 
   @Post('/login')
-  async login(@Body() loginDto: LoginDto): Promise<ISigninData> {
+  async login(@Body() loginDto: LoginDto): Promise<LoginDataDto> {
     return this.authService.login(loginDto);
   }
 
