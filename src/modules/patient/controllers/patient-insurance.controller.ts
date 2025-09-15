@@ -1,5 +1,5 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { Body, ClassSerializerInterceptor, Controller, Delete, Get, Param, Post, Put, UseInterceptors } from '@nestjs/common';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { CreatePatientInsuranceDto } from '../dtos/create-patient-insurance.dto';
 import { PatientInsurance } from '../entities/patient-insurance.entity';
 import { PatientInsuranceService } from '../services/patient-insurance.service';
@@ -7,6 +7,8 @@ import { PatientService } from '../services/patient.service';
 
 @Controller('patients/:patientId/insurances')
 @ApiTags('Patient Insurances')
+@ApiBearerAuth()
+@UseInterceptors(ClassSerializerInterceptor)
 export class PatientInsuranceController {
   constructor(
     private readonly patientInsuranceService: PatientInsuranceService,

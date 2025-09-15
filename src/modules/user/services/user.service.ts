@@ -2,11 +2,11 @@ import { BadRequestException, Injectable, NotFoundException, UnauthorizedExcepti
 import { InjectRepository } from '@nestjs/typeorm';
 import { compareSync } from 'bcryptjs';
 import { LoginDto } from 'modules/auth/dtos/login.dto';
-import { ISigninData } from 'modules/auth/interfaces/signin-data.interface';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from '../dtos/create-user-dto';
 import { UpdateUserDto } from '../dtos/update-user-dto';
 import { User } from '../entities/user.entity';
+import { LoginDataDto } from 'modules/auth/dtos/login-data.dto';
 
 @Injectable()
 export class UserService {
@@ -49,7 +49,7 @@ export class UserService {
     return user;
   }
 
-  async validateUserCredential(loginDto: LoginDto): Promise<ISigninData> {
+  async validateUserCredential(loginDto: LoginDto): Promise<LoginDataDto> {
     const user = await this.findOneByEmailOrUsername(loginDto.emailOrUsername, ['userId', 'userName', 'password']);
 
     if (!user) {
@@ -62,12 +62,12 @@ export class UserService {
       throw new UnauthorizedException(`Invalid password for user ${loginDto.emailOrUsername}`);
     }
 
-    const signinData: ISigninData = {
+    const loginData: LoginDataDto = {
       userId: user.userId,
       username: user.userName,
     };
 
-    return signinData;
+    return loginData;
   }
 
   async create(createUserDto: CreateUserDto): Promise<string> {
