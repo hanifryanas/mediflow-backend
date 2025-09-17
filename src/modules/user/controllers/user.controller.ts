@@ -1,15 +1,18 @@
 import { Body, ClassSerializerInterceptor, Controller, Delete, Get, Param, Post, Put, Query, UseInterceptors } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { RequiredRole } from 'common/decorators/required-role.decorator';
 import { CreateUserDto } from '../dtos/create-user-dto';
 import { FilterUserDto } from '../dtos/filter-user.dto';
 import { UpdateUserDto } from '../dtos/update-user-dto';
 import { User } from '../entities/user.entity';
+import { UserRole } from '../enums/user-role.enum';
 import { UserService } from '../services/user.service';
 
 
 @Controller('users')
 @ApiTags('Users')
 @ApiBearerAuth()
+@RequiredRole(UserRole.Staff)
 @UseInterceptors(ClassSerializerInterceptor)
 export class UserController {
   constructor(

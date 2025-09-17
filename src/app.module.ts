@@ -1,7 +1,10 @@
 
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { APP_GUARD } from '@nestjs/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { JwtAuthGuard } from 'common/guards/jwt.guard';
+import { RequiredRoleGuard } from 'common/guards/required-role.guard';
 import { databaseConfig, tokenConfig } from 'config';
 import { PatientModule } from 'modules/patient/patient.module';
 import { UserModule } from 'modules/user/user.module';
@@ -9,6 +12,16 @@ import { join } from 'path';
 import { AuthModule } from './modules/auth/auth.module';
 
 @Module({
+  providers: [
+    {
+      provide: APP_GUARD,
+      useClass: JwtAuthGuard,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: RequiredRoleGuard,
+    }
+  ],
   imports: [
     ConfigModule.forRoot({
       load: [
@@ -36,7 +49,5 @@ import { AuthModule } from './modules/auth/auth.module';
     UserModule,
     PatientModule,
   ],
-  controllers: [],
-  providers: [],
 })
 export class AppModule { }

@@ -1,5 +1,7 @@
 import { Body, ClassSerializerInterceptor, Controller, Delete, Get, Param, Post, Put, UseInterceptors } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { RequiredRole } from 'common/decorators/required-role.decorator';
+import { UserRole } from 'modules/user/enums/user-role.enum';
 import { CreatePatientInsuranceDto } from '../dtos/create-patient-insurance.dto';
 import { PatientInsurance } from '../entities/patient-insurance.entity';
 import { PatientInsuranceService } from '../services/patient-insurance.service';
@@ -15,6 +17,7 @@ export class PatientInsuranceController {
     private readonly patientService: PatientService,
   ) { }
 
+  @RequiredRole(UserRole.Staff)
   @Get()
   async findByPatientId(@Param('patientId') patientId: number): Promise<PatientInsurance[]> {
     return this.patientInsuranceService.findByPatientId(patientId);
@@ -45,11 +48,13 @@ export class PatientInsuranceController {
     await this.patientInsuranceService.update(patientInsuranceId, updatePatientInsuranceDto);
   }
 
+  @RequiredRole(UserRole.Staff)
   @Delete(':patientInsuranceId')
   async delete(@Param('patientInsuranceId') patientInsuranceId: number): Promise<void> {
     await this.patientInsuranceService.delete(patientInsuranceId);
   }
 
+  @RequiredRole(UserRole.Staff)
   @Delete()
   async deleteByPatientId(@Param('patientId') patientId: number): Promise<void> {
     await this.patientInsuranceService.deleteByPatientId(patientId);
