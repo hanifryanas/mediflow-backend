@@ -10,6 +10,7 @@ import { PatientModule } from 'modules/patient/patient.module';
 import { UserModule } from 'modules/user/user.module';
 import { join } from 'path';
 import { AuthModule } from './modules/auth/auth.module';
+import { EmployeeModule } from './modules/employee/employee.module';
 
 @Module({
   providers: [
@@ -20,7 +21,7 @@ import { AuthModule } from './modules/auth/auth.module';
     {
       provide: APP_GUARD,
       useClass: RequiredRoleGuard,
-    }
+    },
   ],
   imports: [
     ConfigModule.forRoot({
@@ -48,6 +49,7 @@ import { AuthModule } from './modules/auth/auth.module';
     AuthModule,
     UserModule,
     PatientModule,
+    EmployeeModule,
   ],
 })
 export class AppModule { }

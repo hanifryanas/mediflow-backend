@@ -1,12 +1,13 @@
 import { BadRequestException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { compareSync } from 'bcryptjs';
+import { LoginDataDto } from 'modules/auth/dtos/login-data.dto';
 import { LoginDto } from 'modules/auth/dtos/login.dto';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from '../dtos/create-user-dto';
 import { UpdateUserDto } from '../dtos/update-user-dto';
 import { User } from '../entities/user.entity';
-import { LoginDataDto } from 'modules/auth/dtos/login-data.dto';
+import { UserRole } from '../enums/user-role.enum';
 
 @Injectable()
 export class UserService {
@@ -87,6 +88,14 @@ export class UserService {
 
     if (!result.affected) {
       throw new BadRequestException(`Failed to update user with ID ${userId}`);
+    }
+  }
+
+  async updateUserRole(userId: string, role: UserRole): Promise<void> {
+    const result = await this.userRepository.update(userId, { role });
+
+    if (!result.affected) {
+      throw new BadRequestException(`Failed to update user role for ID ${userId}`);
     }
   }
 

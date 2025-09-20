@@ -2,6 +2,7 @@ import { ApiHideProperty } from '@nestjs/swagger';
 import { hashSync } from 'bcryptjs';
 import { Exclude, Expose } from 'class-transformer';
 import { differenceInYears } from 'date-fns';
+import { Employee } from 'modules/employee/entities/employee.entity';
 import { Patient } from 'modules/patient/entities/patient.entity';
 import { AfterLoad, BeforeInsert, BeforeUpdate, Column, CreateDateColumn, Entity, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 import { UserGenderType } from '../enums/user-gender.enum';
@@ -65,7 +66,10 @@ export class User {
   }
 
   @OneToOne(() => Patient, (patient) => patient.user)
-  patient: Patient;
+  patient?: Patient;
+
+  @OneToOne(() => Employee, (employee) => employee.user)
+  employee?: Employee;
 
   @Column({ nullable: true })
   address?: string;

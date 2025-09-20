@@ -11,7 +11,7 @@ export class PatientService {
   ) { }
 
   async findAll(): Promise<Patient[]> {
-    return await this.patientRepository.find();
+    return await this.patientRepository.find({ relations: ['user'] });
   }
 
   async findBy(filterPatientDto: FilterPatientDto): Promise<Patient[]> {
