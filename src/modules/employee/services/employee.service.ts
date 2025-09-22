@@ -48,6 +48,14 @@ export class EmployeeService {
     return createdEmployee.employeeId;
   }
 
+  async deleteByUserId(userId: string): Promise<void> {
+    const result = await this.employeeRepository.delete({ user: { userId } });
+
+    if (!result.affected) {
+      throw new BadRequestException(`Failed to delete employee for user with ID ${userId}`);
+    }
+  }
+
   async delete(employeeId: number): Promise<void> {
     const result = await this.employeeRepository.delete(employeeId);
 

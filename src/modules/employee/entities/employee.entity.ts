@@ -2,6 +2,7 @@ import { Expose } from 'class-transformer';
 import { differenceInDays } from 'date-fns';
 import { User } from 'modules/user/entities/user.entity';
 import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { EmployeeDepartment } from '../enums/employee-department.enum';
 
 @Entity('Employee')
 export class Employee {
@@ -49,4 +50,7 @@ export class Employee {
 
     return result.trim();
   }
+
+  @Column({ type: 'enum', enum: EmployeeDepartment })
+  department: EmployeeDepartment;
 }

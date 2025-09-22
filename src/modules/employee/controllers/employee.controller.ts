@@ -30,6 +30,12 @@ export class EmployeeController {
     return this.employeeService.findOneByUserId(userId);
   }
 
+  @RequiredRole(UserRole.Admin)
+  @Get(':employeeId')
+  async findOneById(@Param('employeeId') employeeId: number): Promise<Employee> {
+    return this.employeeService.findOneBy('employeeId', employeeId);
+  }
+
   @RequiredRole(UserRole.User)
   @Post()
   async create(@Body() createEmployeeDto: CreateEmployeeDto): Promise<number> {
@@ -48,6 +54,16 @@ export class EmployeeController {
   }
 
   @RequiredRole(UserRole.Staff)
+  @Delete('me')
+  async deleteByUserId(@Req() req: any): Promise<void> {
+    const userId = req.user.id as string;
+
+    await this.employeeService.deleteByUserId(userId);
+
+    await this.userService.updateUserRole(userId, UserRole.User);
+  }
+
+  @RequiredRole(UserRole.Admin)
   @Delete(':employeeId')
   async delete(@Param('employeeId') employeeId: number): Promise<void> {
     await this.employeeService.delete(employeeId);
