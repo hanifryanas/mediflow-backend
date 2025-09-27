@@ -36,7 +36,7 @@ export class EmployeeController {
     return this.employeeService.findOneBy('employeeId', employeeId);
   }
 
-  @RequiredRole(UserRole.User)
+  @RequiredRole(UserRole.SuperAdmin)
   @Post()
   async create(@Body() createEmployeeDto: CreateEmployeeDto): Promise<number> {
     const user = await this.userService.findOneBy({ userId: createEmployeeDto.userId });
