@@ -1,0 +1,34 @@
+import { Expose } from 'class-transformer';
+import { Employee } from 'modules/employee/entities/employee.entity';
+import { Column, Entity, OneToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { DoctorSchedule } from './doctor-schedule.entity';
+
+@Entity('Doctor')
+export class Doctor {
+  @PrimaryGeneratedColumn('uuid')
+  doctorId: string;
+
+  @OneToOne(() => Employee, (employee) => employee.doctor, { onDelete: 'CASCADE' })
+  employee: Employee;
+
+  @Column({ length: 50 })
+  title?: string;
+
+  @OneToMany(() => DoctorSchedule, (schedule) => schedule.doctor, { onDelete: 'CASCADE' })
+  schedules?: DoctorSchedule[];
+
+  @Expose({ toPlainOnly: true })
+  get isAvailable(): boolean | undefined {
+    if (!this.schedules || this.schedules.length === 0) return undefined;
+
+    const now = new Date();
+    const day = now.toLocaleString('en-US', { weekday: 'long' });
+    const currentTime = now.toTimeString().slice(0, 5);
+
+    return this.schedules.some(s =>
+      s.day === day &&
+      currentTime >= s.startTime &&
+      currentTime <= s.endTime
+    );
+  }
+}

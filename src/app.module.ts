@@ -11,6 +11,7 @@ import { UserModule } from 'modules/user/user.module';
 import { join } from 'path';
 import { AuthModule } from './modules/auth/auth.module';
 import { EmployeeModule } from './modules/employee/employee.module';
+import { DoctorModule } from './modules/doctor/doctor.module';
 
 @Module({
   providers: [
@@ -50,6 +51,7 @@ import { EmployeeModule } from './modules/employee/employee.module';
     UserModule,
     PatientModule,
     EmployeeModule,
+    DoctorModule,
   ],
 })
 export class AppModule { }
