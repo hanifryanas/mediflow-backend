@@ -6,7 +6,7 @@ import { DoctorSchedule } from '../entities/doctor-schedule.entity';
 import { DoctorScheduleService } from '../services/doctor-schedule.service';
 
 @Controller('doctors/schedules')
-@ApiTags('Doctor Schedules')
+@ApiTags('Doctor-Schedule')
 @ApiBearerAuth()
 @UseInterceptors(ClassSerializerInterceptor)
 export class DoctorScheduleController {

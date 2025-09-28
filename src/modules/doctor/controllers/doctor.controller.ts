@@ -8,7 +8,7 @@ import { Doctor } from '../entities/doctor.entity';
 import { DoctorService } from '../services/doctor.service';
 
 @Controller('doctors')
-@ApiTags('Doctors')
+@ApiTags('Doctor')
 @ApiBearerAuth()
 @UseInterceptors(ClassSerializerInterceptor)
 export class DoctorController {

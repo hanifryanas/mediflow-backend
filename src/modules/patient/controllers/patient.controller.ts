@@ -9,7 +9,7 @@ import { Patient } from '../entities/patient.entity';
 import { PatientService } from '../services/patient.service';
 
 @Controller('patients')
-@ApiTags('Patients')
+@ApiTags('Patient')
 @ApiBearerAuth()
 @UseInterceptors(ClassSerializerInterceptor)
 export class PatientController {

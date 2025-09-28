@@ -10,7 +10,7 @@ import { UserService } from '../services/user.service';
 
 
 @Controller('users')
-@ApiTags('Users')
+@ApiTags('User')
 @ApiBearerAuth()
 @RequiredRole(UserRole.Staff)
 @UseInterceptors(ClassSerializerInterceptor)

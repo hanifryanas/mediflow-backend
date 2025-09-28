@@ -8,7 +8,7 @@ import { PatientInsuranceService } from '../services/patient-insurance.service';
 import { PatientService } from '../services/patient.service';
 
 @Controller('patients/:patientId/insurances')
-@ApiTags('Patient Insurances')
+@ApiTags('Patient-Insurance')
 @ApiBearerAuth()
 @UseInterceptors(ClassSerializerInterceptor)
 export class PatientInsuranceController {
