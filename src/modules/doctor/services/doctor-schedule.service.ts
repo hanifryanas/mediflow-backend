@@ -52,6 +52,17 @@ export class DoctorScheduleService {
     await this.doctorScheduleRepository.save(schedulesWithDoctor);
   }
 
+  async upsertByUserId(userId: string, upsertDoctorScheduleDto: UpsertDoctorScheduleDto): Promise<void> {
+    await this.doctorScheduleRepository.delete({ doctor: { employee: { user: { userId } } } });
+
+    const schedulesWithDoctor = upsertDoctorScheduleDto.schedules.map(schedule => ({
+      ...schedule,
+      doctor: { employee: { user: { userId } } },
+    }));
+
+    await this.doctorScheduleRepository.save(schedulesWithDoctor);
+  }
+
   async deleteByDoctorId(doctorId: string): Promise<void> {
     const doctor = await this.doctorScheduleRepository.findOne({ where: { doctor: { doctorId } } });
 

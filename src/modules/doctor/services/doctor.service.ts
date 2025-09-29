@@ -65,13 +65,13 @@ export class DoctorService {
       return await this.doctorRepository.find({
         where: { [key]: value },
         relations: ['employee', 'employee.user'],
-        select: selection ? selection.reduce((acc, curr) => ({ ...acc, [curr]: true }), {}) : undefined
+        select: selection,
       });
     }
 
     return await this.doctorRepository.find({
       relations: ['employee', 'employee.user'],
-      select: selection ? selection.reduce((acc, curr) => ({ ...acc, [curr]: true }), {}) : undefined
+      select: selection,
     });
   }
 

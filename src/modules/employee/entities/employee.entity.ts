@@ -1,6 +1,7 @@
 import { Expose } from 'class-transformer';
 import { differenceInDays } from 'date-fns';
 import { Doctor } from 'modules/doctor/entities/doctor.entity';
+import { Nurse } from 'modules/nurse/entities/nurse.entity';
 import { User } from 'modules/user/entities/user.entity';
 import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { EmployeeDepartment } from '../enums/employee-department.enum';
@@ -19,6 +20,9 @@ export class Employee {
   get fullName(): string {
     return `${this.user.firstName} ${this.user.lastName}`;
   }
+
+  @OneToOne(() => Nurse, (nurse) => nurse.employee)
+  nurse?: Nurse;
 
   @OneToOne(() => Doctor, (doctor) => doctor.employee)
   doctor?: Doctor;
