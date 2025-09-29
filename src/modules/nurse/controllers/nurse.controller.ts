@@ -1,4 +1,4 @@
-import { Body, ClassSerializerInterceptor, Controller, Get, Param, Post, Put, Req, UseInterceptors } from '@nestjs/common';
+import { Body, ClassSerializerInterceptor, Controller, Delete, Get, Param, Post, Put, Req, UseInterceptors } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { RequiredRole } from 'common/decorators/required-role.decorator';
 import { UserRole } from 'modules/user/enums/user-role.enum';
@@ -62,6 +62,19 @@ export class NurseController {
   @RequiredRole(UserRole.Staff)
   @Put('me')
   async deleteMe(@Req() req: any): Promise<void> {
+    const userId = req.user.id as string;
+    return this.nurseService.deleteByUserId(userId);
+  }
+
+  @RequiredRole(UserRole.Admin)
+  @Delete(':nurseId')
+  async deleteById(@Param('nurseId') nurseId: string): Promise<void> {
+    return this.nurseService.delete(nurseId);
+  }
+
+  @RequiredRole(UserRole.Staff)
+  @Delete('me')
+  async deleteMeByUserId(@Req() req: any): Promise<void> {
     const userId = req.user.id as string;
     return this.nurseService.deleteByUserId(userId);
   }
