@@ -1,10 +1,12 @@
-import { Body, ClassSerializerInterceptor, Controller, Get, Post, Req, UseInterceptors } from '@nestjs/common';
+import { Body, ClassSerializerInterceptor, Controller, Get, Post, Put, Req, UseInterceptors } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { Public } from 'common/decorators/public.decorator';
 import { LoginDataDto } from 'modules/auth/dtos/login-data.dto';
 import { LoginDto } from 'modules/auth/dtos/login.dto';
 import { CreateUserDto } from 'modules/user/dtos/create-user-dto';
+import { UpdateUserDto } from 'modules/user/dtos/update-user-dto';
 import { User } from 'modules/user/entities/user.entity';
+import { UserService } from 'modules/user/services/user.service';
 import { AuthService } from '../services/auth.service';
 
 @Controller('auth')
@@ -13,6 +15,7 @@ import { AuthService } from '../services/auth.service';
 export class AuthController {
   constructor(
     private readonly authService: AuthService,
+    private readonly userService: UserService,
   ) { }
 
   @Public()
@@ -32,6 +35,13 @@ export class AuthController {
   async getProfile(@Req() req): Promise<User> {
     const userId = req.user.id;
     return this.authService.me(userId);
+  }
+
+  @ApiBearerAuth()
+  @Put('/me')
+  async updateProfile(@Req() req, @Body() updateUserDto: UpdateUserDto): Promise<void> {
+    const userId = req.user.id;
+    return this.userService.update(userId, updateUserDto);
   }
 
   @ApiBearerAuth()
