@@ -12,7 +12,7 @@ const exampleUserName = `${exampleFirstName}${exampleLastName}`.toLowerCase();
 const exampleEmail = `${exampleUserName}@mail.com`;
 const examplePassword = faker.helpers.arrayElement(['1', '2', '3', '4', '5', '6', '7', '8', '9', '0']).repeat(8);
 const exampleDateOfBirth = faker.date.birthdate({ min: 1959, max: 2006, mode: 'year' });
-const examplePhoneNumber = `62${faker.phone.number({ style: 'national' }).replace(/\D/g, '').slice(0, 10)}`;
+const examplePhoneNumber = `62${faker.phone.number().replace(/\D/g, '').slice(0, 10)}`;
 const exampleAddress = faker.location.streetAddress();
 
 export class CreateUserDto implements Partial<User> {
