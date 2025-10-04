@@ -35,7 +35,7 @@ export class DoctorScheduleController {
   @RequiredRole(UserRole.Staff)
   @Put('me')
   async updateMe(@Req() req: any, @Body() upsertDoctorScheduleDto: UpsertDoctorScheduleDto): Promise<void> {
-    const userId = req.user.id as string;
+    const userId = req.user.userId as string;
 
     return await this.doctorScheduleService.upsertByUserId(userId, upsertDoctorScheduleDto);
   }

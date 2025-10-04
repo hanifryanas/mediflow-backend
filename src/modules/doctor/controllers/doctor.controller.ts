@@ -25,7 +25,7 @@ export class DoctorController {
   @RequiredRole(UserRole.Staff)
   @Get('me')
   async findMe(@Req() req: any): Promise<Doctor> {
-    const userId = req.user.id as string;
+    const userId = req.user.userId as string;
     return this.doctorService.findByUserId(userId);
   }
 
@@ -44,7 +44,7 @@ export class DoctorController {
   @RequiredRole(UserRole.Staff)
   @Put('me')
   async updateMe(@Req() req: any, @Body() updateDoctorDto: UpdateDoctorDto): Promise<void> {
-    const userId = req.user.id as string;
+    const userId = req.user.userId as string;
     await this.doctorService.update(userId, updateDoctorDto);
   }
 
@@ -63,7 +63,7 @@ export class DoctorController {
   @RequiredRole(UserRole.Staff)
   @Delete('me')
   async deleteMe(@Req() req: any): Promise<void> {
-    const userId = req.user.id as string;
+    const userId = req.user.userId as string;
     return this.doctorService.deleteByUserId(userId);
   }
 }

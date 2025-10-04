@@ -35,7 +35,7 @@ export class NurseScheduleController {
   @RequiredRole(UserRole.Staff)
   @Put('me')
   async updateMe(@Req() req: any, @Body() upsertNurseScheduleDto: UpsertNurseScheduleDto): Promise<void> {
-    const userId = req.user.id as string;
+    const userId = req.user.userId as string;
 
     return await this.nurseScheduleService.upsertByUserId(userId, upsertNurseScheduleDto);
   }

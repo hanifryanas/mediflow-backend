@@ -26,7 +26,7 @@ export class EmployeeController {
   @RequiredRole(UserRole.Staff)
   @Get('me')
   async findOne(@Req() req: any): Promise<Employee> {
-    const userId = req.user.id as string;
+    const userId = req.user.userId as string;
     return this.employeeService.findOneByUserId(userId);
   }
 
@@ -56,7 +56,7 @@ export class EmployeeController {
   @RequiredRole(UserRole.Staff)
   @Delete('me')
   async deleteByUserId(@Req() req: any): Promise<void> {
-    const userId = req.user.id as string;
+    const userId = req.user.userId as string;
 
     await this.employeeService.deleteByUserId(userId);
 

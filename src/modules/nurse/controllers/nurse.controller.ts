@@ -24,7 +24,7 @@ export class NurseController {
   @RequiredRole(UserRole.Staff)
   @Get('me')
   async findMe(@Req() req: any): Promise<Nurse> {
-    const userId = req.user.id as string;
+    const userId = req.user.userId as string;
     return this.nurseService.findByUserId(userId);
   }
 
@@ -43,7 +43,7 @@ export class NurseController {
   @RequiredRole(UserRole.Staff)
   @Put('me')
   async updateMe(@Req() req: any, @Body() updateNurseDto: CreateNurseDto): Promise<void> {
-    const userId = req.user.id as string;
+    const userId = req.user.userId as string;
     await this.nurseService.update(userId, updateNurseDto);
   }
 
@@ -62,7 +62,7 @@ export class NurseController {
   @RequiredRole(UserRole.Staff)
   @Put('me')
   async deleteMe(@Req() req: any): Promise<void> {
-    const userId = req.user.id as string;
+    const userId = req.user.userId as string;
     return this.nurseService.deleteByUserId(userId);
   }
 
@@ -75,7 +75,7 @@ export class NurseController {
   @RequiredRole(UserRole.Staff)
   @Delete('me')
   async deleteMeByUserId(@Req() req: any): Promise<void> {
-    const userId = req.user.id as string;
+    const userId = req.user.userId as string;
     return this.nurseService.deleteByUserId(userId);
   }
 }

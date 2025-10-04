@@ -33,21 +33,21 @@ export class AuthController {
   @ApiBearerAuth()
   @Get('/me')
   async getProfile(@Req() req): Promise<User> {
-    const userId = req.user.id;
+    const userId = req.user.userId;
     return this.authService.me(userId);
   }
 
   @ApiBearerAuth()
   @Put('/me')
   async updateProfile(@Req() req, @Body() updateUserDto: UpdateUserDto): Promise<void> {
-    const userId = req.user.id;
+    const userId = req.user.userId;
     return this.userService.update(userId, updateUserDto);
   }
 
   @ApiBearerAuth()
   @Post('/logout')
   async logout(@Req() req): Promise<void> {
-    const userId = req.user.id;
+    const userId = req.user.userId;
     return this.authService.logout(userId);
   }
 }
