@@ -3,7 +3,7 @@ import { differenceInDays } from 'date-fns';
 import { Doctor } from 'modules/doctor/entities/doctor.entity';
 import { Nurse } from 'modules/nurse/entities/nurse.entity';
 import { User } from 'modules/user/entities/user.entity';
-import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { EmployeeDepartment } from '../enums/employee-department.enum';
 
 @Entity('Employee')
@@ -11,6 +11,7 @@ export class Employee {
   @PrimaryGeneratedColumn('identity')
   employeeId: number;
 
+  @JoinColumn({ name: 'userId' })
   @OneToOne(() => User, (user) => user.employee, {
     onDelete: 'CASCADE',
   })
