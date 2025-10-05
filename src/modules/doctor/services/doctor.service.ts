@@ -78,15 +78,22 @@ export class DoctorService {
   async create(createDoctorDto: CreateDoctorDto): Promise<string> {
     const { title, ...employeeData } = createDoctorDto;
 
-    const employeeId = await this.employeeService.create(employeeData);
+    let currentEmployeeId: number | undefined = undefined;
 
-    if (!employeeId) {
+    if (employeeData.userId) {
+      const currentEmployee = await this.employeeService.findOneByUserId(employeeData.userId, ['employeeId']);
+      currentEmployeeId = currentEmployee.employeeId;
+    } else {
+      currentEmployeeId = await this.employeeService.create(employeeData);
+    }
+
+    if (!currentEmployeeId) {
       throw new BadRequestException('Failed to create employee');
     }
 
     const createDoctor = this.doctorRepository.create({
       ...createDoctorDto,
-      employee: { employeeId },
+      employee: { employeeId: currentEmployeeId },
     });
 
     const createdDoctor = await this.doctorRepository.save(createDoctor);

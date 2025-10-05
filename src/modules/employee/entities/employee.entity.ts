@@ -13,12 +13,14 @@ export class Employee {
 
   @OneToOne(() => User, (user) => user.employee, {
     onDelete: 'CASCADE',
+    eager: true,
   })
   @JoinColumn({ name: 'userId' })
   user: User;
 
   @Expose()
   get fullName(): string {
+    if (!this.user) return '';
     return `${this.user.firstName} ${this.user.lastName}`;
   }
 
