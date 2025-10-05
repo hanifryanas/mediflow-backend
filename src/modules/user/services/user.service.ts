@@ -51,7 +51,7 @@ export class UserService {
   }
 
   async validateUserCredential(loginDto: LoginDto): Promise<LoginDataDto> {
-    const user = await this.findOneByEmailOrUsername(loginDto.emailOrUsername, ['userId', 'userName', 'password']);
+    const user = await this.findOneByEmailOrUsername(loginDto.emailOrUsername, ['userId', 'userName', 'password', 'role']);
 
     if (!user) {
       throw new UnauthorizedException(`User with email or username ${loginDto.emailOrUsername} is not registered`);
@@ -66,6 +66,7 @@ export class UserService {
     const loginData: LoginDataDto = {
       userId: user.userId,
       username: user.userName,
+      role: user.role,
     };
 
     return loginData;
