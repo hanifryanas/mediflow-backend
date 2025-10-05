@@ -1,6 +1,6 @@
 import { Expose } from 'class-transformer';
 import { Employee } from 'modules/employee/entities/employee.entity';
-import { Column, Entity, OneToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { NurseSchedule } from './nurse-schedule.entity';
 
 @Entity('Nurse')
@@ -9,6 +9,7 @@ export class Nurse {
   nurseId: string;
 
   @OneToOne(() => Employee, (employee) => employee.nurse, { onDelete: 'CASCADE' })
+  @JoinColumn({ name: 'employeeId' })
   employee: Employee;
 
   @Column({ length: 50 })

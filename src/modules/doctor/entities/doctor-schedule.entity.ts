@@ -1,5 +1,5 @@
 import { Day } from 'common/enums/day.enum';
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Doctor } from './doctor.entity';
 
 @Entity('DoctorSchedule')
@@ -8,10 +8,11 @@ export class DoctorSchedule {
   doctorScheduleId: number;
 
   @ManyToOne(() => Doctor, (doctor) => doctor.schedules, { onDelete: 'CASCADE' })
+  @JoinColumn({ name: 'doctorId' })
   doctor: Doctor;
 
   @Column({ type: 'enum', enum: Day })
-  day: Day
+  day: Day;
 
   @Column({ type: 'time' })
   startTime: string;

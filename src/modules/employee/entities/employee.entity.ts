@@ -11,10 +11,10 @@ export class Employee {
   @PrimaryGeneratedColumn('identity')
   employeeId: number;
 
-  @JoinColumn({ name: 'userId' })
   @OneToOne(() => User, (user) => user.employee, {
     onDelete: 'CASCADE',
   })
+  @JoinColumn({ name: 'userId' })
   user: User;
 
   @Expose()
