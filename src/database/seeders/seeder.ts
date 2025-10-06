@@ -8,6 +8,7 @@ import { User } from 'modules/user/entities/user.entity';
 import { seeder } from 'nestjs-seeder';
 import { join } from 'path';
 import { EmployeeAdminSeeder } from './employee-admin.seeder';
+import { PatientSeeder } from './patient-seeder';
 import { UserSuperAdminSeeder } from './user-super-admin.seeder';
 
 seeder({
@@ -41,4 +42,5 @@ seeder({
 }).run([
   UserSuperAdminSeeder,
   EmployeeAdminSeeder,
+  PatientSeeder,
 ])
