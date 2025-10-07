@@ -11,6 +11,19 @@ import { Repository } from 'typeorm';
 
 @Injectable()
 export class UserSuperAdminSeeder implements Seeder {
+  private superAdminUser: Partial<User> = {
+    identityNumber: faker.string.numeric(16),
+    email: 'superadmin@mail.com',
+    userName: 'superadmin',
+    password: 'superadmin',
+    firstName: 'Super',
+    lastName: 'Admin',
+    gender: UserGenderType.Male,
+    role: UserRole.SuperAdmin,
+    phoneNumber: `628${faker.string.numeric(10)}`,
+    dateOfBirth: faker.date.birthdate({ min: 1970, max: 2000, mode: 'year' }),
+  }
+
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
@@ -19,23 +32,10 @@ export class UserSuperAdminSeeder implements Seeder {
   ) { }
 
   async seed() {
-    const existingSuperAdminUser = await this.userRepository.findOne({ where: { userName: 'superadmin' } });
+    const existingSuperAdminUser = await this.userRepository.findOne({ where: { userName: this.superAdminUser.userName } });
     if (existingSuperAdminUser) return;
 
-    const superAdminUser: Partial<User> = {
-      identityNumber: faker.string.numeric(16),
-      email: 'superadmin@mail.com',
-      userName: 'superadmin',
-      password: 'superadmin',
-      firstName: 'Super',
-      lastName: 'Admin',
-      gender: UserGenderType.Male,
-      role: UserRole.SuperAdmin,
-      phoneNumber: faker.phone.number().replace(/\D/g, '').slice(0, 10),
-      dateOfBirth: faker.date.birthdate({ min: 1970, max: 2000, mode: 'year' }),
-    }
-
-    const user = this.userRepository.create(superAdminUser);
+    const user = this.userRepository.create(this.superAdminUser);
     const createdUser = await this.userRepository.save(user);
 
     const superAdminEmployee: Partial<Employee> = {
@@ -49,6 +49,6 @@ export class UserSuperAdminSeeder implements Seeder {
   }
 
   async drop() {
-    await this.userRepository.delete({ userName: 'superadmin' });
+    await this.userRepository.delete({ userName: this.superAdminUser.userName });
   }
 }

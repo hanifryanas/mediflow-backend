@@ -11,6 +11,19 @@ import { Repository } from 'typeorm';
 
 @Injectable()
 export class EmployeeAdminSeeder implements Seeder {
+  private employeeUsers: Partial<User>[] = Object.values(EmployeeDepartment).map(dept => ({
+    identityNumber: faker.string.numeric(16),
+    email: `${dept}admin@mail.com`,
+    userName: `${dept}admin`,
+    password: `${dept}admin`,
+    firstName: dept.charAt(0).toUpperCase() + dept.slice(1),
+    lastName: 'Admin',
+    gender: faker.helpers.arrayElement(Object.values(UserGenderType)),
+    role: UserRole.Admin,
+    phoneNumber: `628${faker.string.numeric(10)}`,
+    dateOfBirth: faker.date.birthdate({ min: 1970, max: 2000, mode: 'year' }),
+  }));
+
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
@@ -22,20 +35,7 @@ export class EmployeeAdminSeeder implements Seeder {
     const existingAdminUsers = await this.userRepository.findOne({ where: { role: UserRole.Admin } });
     if (existingAdminUsers) return;
 
-    const employeeUsers: Partial<User>[] = Object.values(EmployeeDepartment).map(dept => ({
-      identityNumber: faker.string.numeric(16),
-      email: `${dept}admin@mail.com`,
-      userName: `${dept}admin`,
-      password: `${dept}admin`,
-      firstName: dept.charAt(0).toUpperCase() + dept.slice(1),
-      lastName: 'Admin',
-      gender: faker.helpers.arrayElement(Object.values(UserGenderType)),
-      role: UserRole.Admin,
-      phoneNumber: faker.phone.number().replace(/\D/g, '').slice(0, 10),
-      dateOfBirth: faker.date.birthdate({ min: 1970, max: 2000, mode: 'year' }),
-    }));
-
-    const createdUsers = await Promise.all(employeeUsers.map(async user => await this.userRepository.save(this.userRepository.create(user))))
+    const createdUsers = await Promise.all(this.employeeUsers.map(async user => await this.userRepository.save(this.userRepository.create(user))))
 
     const employeeAdmins: Partial<Employee>[] = createdUsers.map(user => ({
       user,
@@ -47,6 +47,6 @@ export class EmployeeAdminSeeder implements Seeder {
   }
 
   async drop() {
-    await this.userRepository.delete({ role: UserRole.Admin });
+    await this.userRepository.delete(this.employeeUsers);
   }
 }

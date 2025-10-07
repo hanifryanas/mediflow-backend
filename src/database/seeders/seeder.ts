@@ -4,6 +4,8 @@ import { databaseConfig } from 'config/database.config';
 import { Doctor } from 'modules/doctor/entities/doctor.entity';
 import { Employee } from 'modules/employee/entities/employee.entity';
 import { Nurse } from 'modules/nurse/entities/nurse.entity';
+import { PatientInsurance } from 'modules/patient/entities/patient-insurance.entity';
+import { Patient } from 'modules/patient/entities/patient.entity';
 import { User } from 'modules/user/entities/user.entity';
 import { seeder } from 'nestjs-seeder';
 import { join } from 'path';
@@ -37,6 +39,8 @@ seeder({
       Employee,
       Doctor,
       Nurse,
+      Patient,
+      PatientInsurance,
     ]),
   ],
 }).run([
