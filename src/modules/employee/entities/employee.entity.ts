@@ -1,4 +1,5 @@
 import { Expose } from 'class-transformer';
+import { BaseEntity } from 'common/entities/base.entity';
 import { differenceInDays } from 'date-fns';
 import { Doctor } from 'modules/doctor/entities/doctor.entity';
 import { Nurse } from 'modules/nurse/entities/nurse.entity';
@@ -7,7 +8,7 @@ import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from 'ty
 import { EmployeeDepartment } from '../enums/employee-department.enum';
 
 @Entity('Employee')
-export class Employee {
+export class Employee extends BaseEntity {
   @PrimaryGeneratedColumn('identity')
   employeeId: number;
 

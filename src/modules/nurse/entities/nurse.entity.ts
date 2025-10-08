@@ -1,10 +1,11 @@
 import { Expose } from 'class-transformer';
+import { BaseEntity } from 'common/entities/base.entity';
 import { Employee } from 'modules/employee/entities/employee.entity';
 import { Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { NurseSchedule } from './nurse-schedule.entity';
 
 @Entity('Nurse')
-export class Nurse {
+export class Nurse extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   nurseId: string;
 

@@ -1,9 +1,10 @@
+import { BaseEntity } from 'common/entities/base.entity';
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { InsuranceProviderType } from '../enums/insurance-provider.enum';
 import { Patient } from './patient.entity';
 
 @Entity('PatientInsurance')
-export class PatientInsurance {
+export class PatientInsurance extends BaseEntity {
   @PrimaryGeneratedColumn('identity')
   patientInsuranceId: number;
 

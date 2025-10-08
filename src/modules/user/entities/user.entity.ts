@@ -1,16 +1,17 @@
 import { ApiHideProperty } from '@nestjs/swagger';
 import { hashSync } from 'bcryptjs';
 import { Exclude, Expose } from 'class-transformer';
+import { BaseEntity } from 'common/entities/base.entity';
 import { differenceInYears } from 'date-fns';
 import { Employee } from 'modules/employee/entities/employee.entity';
 import { Patient } from 'modules/patient/entities/patient.entity';
-import { AfterLoad, BeforeInsert, BeforeUpdate, Column, CreateDateColumn, Entity, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { AfterLoad, BeforeInsert, BeforeUpdate, Column, Entity, OneToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { UserGenderType } from '../enums/user-gender.enum';
 import { UserRole } from '../enums/user-role.enum';
 import { UserToken } from './user-token.entity';
 
 @Entity('User')
-export class User {
+export class User extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   userId: string;
 
@@ -82,10 +83,4 @@ export class User {
   @ApiHideProperty()
   @OneToMany(() => UserToken, (token) => token.user, { cascade: true })
   tokens?: UserToken[];
-
-  @CreateDateColumn()
-  createdAt: Date;
-
-  @UpdateDateColumn()
-  updatedAt: Date;
 }

@@ -1,9 +1,10 @@
+import { BaseEntity } from 'common/entities/base.entity';
 import { Day } from 'common/enums/day.enum';
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Nurse } from './nurse.entity';
 
 @Entity('NurseSchedule')
-export class NurseSchedule {
+export class NurseSchedule extends BaseEntity {
   @PrimaryGeneratedColumn('identity')
   nurseScheduleId: number;
 

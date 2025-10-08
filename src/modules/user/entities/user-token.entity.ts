@@ -1,9 +1,10 @@
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { BaseEntity } from 'common/entities/base.entity';
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { UserTokenType } from '../enums/user-token.enum';
 import { User } from './user.entity';
 
 @Entity('UserToken')
-export class UserToken {
+export class UserToken extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   userTokenId: string;
 
@@ -19,7 +20,4 @@ export class UserToken {
 
   @Column({ type: 'timestamp' })
   expiredAt: Date;
-
-  @CreateDateColumn()
-  createdAt: Date;
 }
