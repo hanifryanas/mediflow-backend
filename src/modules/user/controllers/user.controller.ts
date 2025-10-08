@@ -1,4 +1,4 @@
-import { Body, ClassSerializerInterceptor, Controller, Delete, Get, Param, Post, Put, Query, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, Query } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { RequiredRole } from 'common/decorators/required-role.decorator';
 import { CreateUserDto } from '../dtos/create-user-dto';
@@ -13,7 +13,6 @@ import { UserService } from '../services/user.service';
 @ApiTags('User')
 @ApiBearerAuth()
 @RequiredRole(UserRole.Staff)
-@UseInterceptors(ClassSerializerInterceptor)
 export class UserController {
   constructor(
     private readonly userService: UserService,

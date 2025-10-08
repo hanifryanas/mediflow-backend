@@ -1,4 +1,4 @@
-import { Body, ClassSerializerInterceptor, Controller, Delete, Get, Param, Post, Req, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Req } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { RequiredRole } from 'common/decorators/required-role.decorator';
 import { UserRole } from 'modules/user/enums/user-role.enum';
@@ -10,7 +10,6 @@ import { EmployeeService } from '../services/employee.service';
 @Controller('employees')
 @ApiTags('Employee')
 @ApiBearerAuth()
-@UseInterceptors(ClassSerializerInterceptor)
 export class EmployeeController {
   constructor(
     private readonly employeeService: EmployeeService,

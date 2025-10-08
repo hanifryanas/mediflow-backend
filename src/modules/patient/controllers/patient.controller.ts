@@ -1,4 +1,4 @@
-import { Body, ClassSerializerInterceptor, Controller, Delete, Get, Param, Post, Query, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Query, Req } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { RequiredRole } from 'common/decorators/required-role.decorator';
 import { UserRole } from 'modules/user/enums/user-role.enum';
@@ -11,7 +11,6 @@ import { PatientService } from '../services/patient.service';
 @Controller('patients')
 @ApiTags('Patient')
 @ApiBearerAuth()
-@UseInterceptors(ClassSerializerInterceptor)
 export class PatientController {
   constructor(
     private readonly patientService: PatientService,
@@ -24,9 +23,17 @@ export class PatientController {
     return await this.patientService.findBy(query);
   }
 
+  @RequiredRole(UserRole.Staff)
   @Get(':patientId')
   async findOne(@Param('patientId') patientId: number): Promise<Patient> {
     return await this.patientService.findOneBy('patientId', patientId);
+  }
+
+  @RequiredRole(UserRole.User)
+  @Get('me')
+  async findByMe(@Req() req: any): Promise<Patient> {
+    const userId = req.user.userId as string;
+    return await this.patientService.findOneByUserId(userId);
   }
 
   @Post()

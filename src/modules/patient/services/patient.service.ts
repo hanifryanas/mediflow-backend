@@ -41,6 +41,15 @@ export class PatientService {
     return patient;
   }
 
+  async findOneByUserId(userId: string): Promise<Patient> {
+    const patient = await this.patientRepository.findOneBy({ user: { userId } });
+
+    if (!patient) {
+      throw new NotFoundException(`Patient with userId ${userId} not found`);
+    }
+
+    return patient;
+  }
 
   async create(patient: Partial<Patient>): Promise<number> {
     const createPatientDto = this.patientRepository.create(patient);

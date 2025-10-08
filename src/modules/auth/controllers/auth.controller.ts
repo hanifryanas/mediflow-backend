@@ -1,4 +1,4 @@
-import { Body, ClassSerializerInterceptor, Controller, Get, Post, Put, Req, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Get, Post, Put, Req } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { Public } from 'common/decorators/public.decorator';
 import { LoginDataDto } from 'modules/auth/dtos/login-data.dto';
@@ -11,7 +11,6 @@ import { AuthService } from '../services/auth.service';
 
 @Controller('auth')
 @ApiTags('Auth')
-@UseInterceptors(ClassSerializerInterceptor)
 export class AuthController {
   constructor(
     private readonly authService: AuthService,

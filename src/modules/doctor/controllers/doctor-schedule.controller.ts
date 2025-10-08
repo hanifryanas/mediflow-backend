@@ -1,4 +1,4 @@
-import { Body, ClassSerializerInterceptor, Controller, Delete, Get, Param, Put, Query, Req, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Put, Query, Req } from '@nestjs/common';
 import { ApiBearerAuth, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { RequiredRole } from 'common/decorators/required-role.decorator';
 import { UserRole } from 'modules/user/enums/user-role.enum';
@@ -10,7 +10,6 @@ import { DoctorScheduleService } from '../services/doctor-schedule.service';
 @Controller('doctors/schedules')
 @ApiTags('Doctor-Schedule')
 @ApiBearerAuth()
-@UseInterceptors(ClassSerializerInterceptor)
 export class DoctorScheduleController {
   constructor(
     private readonly doctorScheduleService: DoctorScheduleService,
