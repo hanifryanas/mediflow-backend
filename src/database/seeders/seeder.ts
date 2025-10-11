@@ -1,6 +1,7 @@
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { databaseConfig } from 'config/database.config';
+import { DoctorSchedule } from 'modules/doctor/entities/doctor-schedule.entity';
 import { Doctor } from 'modules/doctor/entities/doctor.entity';
 import { Employee } from 'modules/employee/entities/employee.entity';
 import { Nurse } from 'modules/nurse/entities/nurse.entity';
@@ -9,6 +10,7 @@ import { Patient } from 'modules/patient/entities/patient.entity';
 import { User } from 'modules/user/entities/user.entity';
 import { seeder } from 'nestjs-seeder';
 import { join } from 'path';
+import { DoctorSeeder } from './doctor.seeder';
 import { EmployeeAdminSeeder } from './employee-admin.seeder';
 import { PatientSeeder } from './patient-seeder';
 import { UserSuperAdminSeeder } from './user-super-admin.seeder';
@@ -41,10 +43,13 @@ seeder({
       Nurse,
       Patient,
       PatientInsurance,
+      Doctor,
+      DoctorSchedule,
     ]),
   ],
 }).run([
   UserSuperAdminSeeder,
   EmployeeAdminSeeder,
   PatientSeeder,
+  DoctorSeeder,
 ])

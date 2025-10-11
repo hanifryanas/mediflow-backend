@@ -15,7 +15,7 @@ export class PatientSeeder implements Seeder {
     const gender = faker.person.sexType() as UserGenderType;
     const firstName = faker.person.firstName(gender);
     const lastName = faker.person.lastName(gender);
-    const base = `${firstName}${lastName}`.toLowerCase();
+    const base = `${firstName}${lastName}`.toLowerCase().slice(0, 15);
     return {
       identityNumber: faker.string.numeric(16),
       email: `${base}@mail.com`,

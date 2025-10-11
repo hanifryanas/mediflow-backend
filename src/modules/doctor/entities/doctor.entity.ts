@@ -13,7 +13,7 @@ export class Doctor extends BaseEntity {
   @JoinColumn({ name: 'employeeId' })
   employee: Employee;
 
-  @Column({ length: 50 })
+  @Column({ nullable: true, length: 50 })
   title?: string;
 
   @OneToMany(() => DoctorSchedule, (schedule) => schedule.doctor, { onDelete: 'CASCADE' })
