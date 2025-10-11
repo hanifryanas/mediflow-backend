@@ -71,7 +71,12 @@ export class DoctorSeeder implements Seeder {
     @InjectRepository(DoctorSchedule)
     private readonly doctorScheduleRepository: Repository<DoctorSchedule>,
   ) { }
+  
   async seed() {
+    const existingDoctors = await this.doctorRepository.count();
+    const isDoctorsExist = existingDoctors > 0;
+    if (isDoctorsExist) return;
+
     const createdDoctorUsers = await Promise.all(this.generatedDoctorUsers.map(async user => await this.userRepository.save((user))));
 
     const createdEmployees = await Promise.all(createdDoctorUsers.map(async user => {
