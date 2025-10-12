@@ -1,8 +1,9 @@
 import { Expose } from 'class-transformer';
 import { BaseEntity } from 'common/entities/base.entity';
 import { Employee } from 'modules/employee/entities/employee.entity';
-import { Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToMany, OneToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { NurseSchedule } from './nurse-schedule.entity';
+import { Appointment } from 'modules/appointment/entities/appointment.entity';
 
 @Entity('Nurse')
 export class Nurse extends BaseEntity {
@@ -18,6 +19,9 @@ export class Nurse extends BaseEntity {
 
   @OneToMany(() => NurseSchedule, (schedule) => schedule.nurse, { onDelete: 'CASCADE' })
   schedules?: NurseSchedule[];
+
+  @ManyToMany(() => Appointment, (appointment) => appointment.nurses)
+  appointments?: Appointment[];
 
   @Expose({ toPlainOnly: true })
   get isAvailable(): boolean | undefined {

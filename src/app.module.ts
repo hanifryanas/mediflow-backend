@@ -13,6 +13,7 @@ import { AuthModule } from './modules/auth/auth.module';
 import { DoctorModule } from './modules/doctor/doctor.module';
 import { EmployeeModule } from './modules/employee/employee.module';
 import { NurseModule } from './modules/nurse/nurse.module';
+import { AppointmentModule } from './modules/appointment/appointment.module';
 
 @Module({
   providers: [
@@ -60,6 +61,7 @@ import { NurseModule } from './modules/nurse/nurse.module';
     EmployeeModule,
     DoctorModule,
     NurseModule,
+    AppointmentModule,
   ],
 })
 export class AppModule { }

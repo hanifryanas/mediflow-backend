@@ -3,6 +3,7 @@ import { BaseEntity } from 'common/entities/base.entity';
 import { Employee } from 'modules/employee/entities/employee.entity';
 import { Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { DoctorSchedule } from './doctor-schedule.entity';
+import { Appointment } from 'modules/appointment/entities/appointment.entity';
 
 @Entity('Doctor')
 export class Doctor extends BaseEntity {
@@ -18,6 +19,9 @@ export class Doctor extends BaseEntity {
 
   @OneToMany(() => DoctorSchedule, (schedule) => schedule.doctor, { onDelete: 'CASCADE' })
   schedules?: DoctorSchedule[];
+
+  @OneToMany(() => Appointment, (appointment) => appointment.doctor)
+  appointments?: Appointment[];
 
   @Expose({ toPlainOnly: true })
   get isAvailable(): boolean | undefined {
