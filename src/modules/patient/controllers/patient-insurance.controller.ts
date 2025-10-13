@@ -18,7 +18,7 @@ export class PatientInsuranceController {
 
   @RequiredRole(UserRole.Staff)
   @Get()
-  async findByPatientId(@Param('patientId') patientId: number): Promise<PatientInsurance[]> {
+  async findByPatientId(@Param('patientId') patientId: string): Promise<PatientInsurance[]> {
     return this.patientInsuranceService.findByPatientId(patientId);
   }
 
@@ -28,7 +28,7 @@ export class PatientInsuranceController {
   }
 
   @Post()
-  async create(@Param('patientId') patientId: number, @Body() createPatientInsuranceDto: CreatePatientInsuranceDto): Promise<number> {
+  async create(@Param('patientId') patientId: string, @Body() createPatientInsuranceDto: CreatePatientInsuranceDto): Promise<number> {
     const patient = await this.patientService.findOneBy('patientId', patientId);
 
     const createPatientInsurance = {
@@ -55,7 +55,7 @@ export class PatientInsuranceController {
 
   @RequiredRole(UserRole.Staff)
   @Delete()
-  async deleteByPatientId(@Param('patientId') patientId: number): Promise<void> {
+  async deleteByPatientId(@Param('patientId') patientId: string): Promise<void> {
     await this.patientInsuranceService.deleteByPatientId(patientId);
   }
 }

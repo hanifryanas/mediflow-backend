@@ -9,8 +9,8 @@ import { EmployeeDepartment } from '../enums/employee-department.enum';
 
 @Entity('Employee')
 export class Employee extends BaseEntity {
-  @PrimaryGeneratedColumn('identity')
-  employeeId: number;
+  @PrimaryGeneratedColumn('uuid')
+  employeeId: string;
 
   @OneToOne(() => User, (user) => user.employee, {
     onDelete: 'CASCADE',

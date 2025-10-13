@@ -25,7 +25,7 @@ export class PatientController {
 
   @RequiredRole(UserRole.Staff)
   @Get(':patientId')
-  async findOne(@Param('patientId') patientId: number): Promise<Patient> {
+  async findOne(@Param('patientId') patientId: string): Promise<Patient> {
     return await this.patientService.findOneBy('patientId', patientId);
   }
 
@@ -37,7 +37,7 @@ export class PatientController {
   }
 
   @Post()
-  async create(@Body() createPatientDto: CreatePatientDto): Promise<number> {
+  async create(@Body() createPatientDto: CreatePatientDto): Promise<string> {
     const user = await this.userService.findOneBy({ userId: createPatientDto.userId });
 
     const createPatient = {

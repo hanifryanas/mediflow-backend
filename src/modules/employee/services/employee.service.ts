@@ -38,7 +38,7 @@ export class EmployeeService {
     return employee;
   }
 
-  async create(employee: Partial<Employee>): Promise<number> {
+  async create(employee: Partial<Employee>): Promise<string> {
     const createEmployeeDto = this.employeeRepository.create(employee);
     const createdEmployee = await this.employeeRepository.save(createEmployeeDto);
 

@@ -13,7 +13,10 @@ export class Appointment extends BaseEntity {
   status: Status;
 
   @Column({ type: 'timestamp' })
-  date: Date;
+  startTime: Date;
+
+  @Column({ type: 'timestamp' })
+  endTime: Date;
 
   @ManyToOne(() => Patient, (patient) => patient.appointments, { eager: true })
   @JoinColumn({ name: 'patientId' })
@@ -32,4 +35,10 @@ export class Appointment extends BaseEntity {
 
   @Column({ type: 'text', nullable: true })
   diagnosis?: string;
+
+  @Column({ type: 'text', nullable: true })
+  notes?: string;
+
+  @Column({ type: 'text', nullable: true })
+  room?: string;
 }

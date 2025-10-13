@@ -24,7 +24,7 @@ export class NurseService {
     return nurse;
   }
 
-  async findByEmployeeId(employeeId: number): Promise<Nurse> {
+  async findByEmployeeId(employeeId: string): Promise<Nurse> {
     const nurse = await this.nurseRepository.findOne({
       where: {
         employee: {
@@ -77,7 +77,7 @@ export class NurseService {
   async create(createNurseDto: CreateNurseDto): Promise<string> {
     const { title, ...employeeData } = createNurseDto;
 
-    let currentEmployeeId: number | undefined = undefined;
+    let currentEmployeeId: string | undefined = undefined;
 
     if (employeeData.userId) {
       const currentEmployee = await this.employeeService.findOneByUserId(employeeData.userId, ['employeeId']);
@@ -124,7 +124,7 @@ export class NurseService {
     await this.nurseRepository.remove(nurse);
   }
 
-  async deleteByEmployeeId(employeeId: number): Promise<void> {
+  async deleteByEmployeeId(employeeId: string): Promise<void> {
     const nurse = await this.findByEmployeeId(employeeId);
 
     if (!nurse) {

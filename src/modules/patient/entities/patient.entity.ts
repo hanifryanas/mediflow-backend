@@ -6,8 +6,8 @@ import { Appointment } from 'modules/appointment/entities/appointment.entity';
 
 @Entity('Patient')
 export class Patient extends BaseEntity {
-  @PrimaryGeneratedColumn('identity')
-  patientId: number;
+  @PrimaryGeneratedColumn('uuid')
+  patientId: string;
 
   @OneToOne(() => User, (user) => user.userId, {
     onDelete: 'CASCADE',

@@ -4,6 +4,7 @@ import { Employee } from 'modules/employee/entities/employee.entity';
 import { Column, Entity, JoinColumn, ManyToMany, OneToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { NurseSchedule } from './nurse-schedule.entity';
 import { Appointment } from 'modules/appointment/entities/appointment.entity';
+import { Status } from 'common/enums/status.enum';
 
 @Entity('Nurse')
 export class Nurse extends BaseEntity {
@@ -31,10 +32,16 @@ export class Nurse extends BaseEntity {
     const day = now.toLocaleString('en-US', { weekday: 'long' });
     const currentTime = now.toTimeString().slice(0, 5);
 
-    return this.schedules.some(s =>
+    const isScheduled = this.schedules.some(s =>
       s.day === day &&
       currentTime >= s.startTime &&
       currentTime <= s.endTime
     );
+
+    const hasOngoingAppointment = this.appointments?.some(a =>
+      a.status === Status.Incompleted && a.startTime <= now && a.endTime >= now
+    );
+
+    return isScheduled && !hasOngoingAppointment;
   }
 }

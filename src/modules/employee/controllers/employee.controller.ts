@@ -31,13 +31,13 @@ export class EmployeeController {
 
   @RequiredRole(UserRole.Admin)
   @Get(':employeeId')
-  async findOneById(@Param('employeeId') employeeId: number): Promise<Employee> {
+  async findOneById(@Param('employeeId') employeeId: string): Promise<Employee> {
     return this.employeeService.findOneBy('employeeId', employeeId);
   }
 
   @RequiredRole(UserRole.SuperAdmin)
   @Post()
-  async create(@Body() createEmployeeDto: CreateEmployeeDto): Promise<number> {
+  async create(@Body() createEmployeeDto: CreateEmployeeDto): Promise<string> {
     const user = await this.userService.findOneBy({ userId: createEmployeeDto.userId });
 
     const createEmployee = {

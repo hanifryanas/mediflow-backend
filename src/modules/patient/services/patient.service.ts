@@ -51,7 +51,7 @@ export class PatientService {
     return patient;
   }
 
-  async create(patient: Partial<Patient>): Promise<number> {
+  async create(patient: Partial<Patient>): Promise<string> {
     const createPatientDto = this.patientRepository.create(patient);
     const createdPatient = await this.patientRepository.save(createPatientDto);
 

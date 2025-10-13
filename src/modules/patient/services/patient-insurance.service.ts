@@ -13,7 +13,7 @@ export class PatientInsuranceService {
     return await this.patientInsuranceRepository.find({ select: ['insuranceProvider', 'policyNumber'] });
   }
 
-  async findByPatientId(patientId: number): Promise<PatientInsurance[]> {
+  async findByPatientId(patientId: string): Promise<PatientInsurance[]> {
     return await this.patientInsuranceRepository.find({
       where: { patient: { patientId } },
       relations: ['patient'],
@@ -59,7 +59,7 @@ export class PatientInsuranceService {
     }
   }
 
-  async deleteByPatientId(patientId: number): Promise<void> {
+  async deleteByPatientId(patientId: string): Promise<void> {
     const result = await this.patientInsuranceRepository.delete({ patient: { patientId } });
 
     if (!result.affected) {
