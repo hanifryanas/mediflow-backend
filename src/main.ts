@@ -8,7 +8,6 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   app.setGlobalPrefix('api');
-  app.enableVersioning({ type: VersioningType.URI, defaultVersion: '1' });
 
   app.useGlobalPipes(
     new ValidationPipe({
@@ -26,6 +25,7 @@ async function bootstrap() {
     .setVersion('1.0')
     .addBearerAuth()
     .build();
+    
   const doc = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api/docs', app, doc);
 
