@@ -1,10 +1,16 @@
 import { Expose } from 'class-transformer';
-import { BaseEntity } from 'common/entities/base.entity';
+import { BaseEntity } from '../../../common/entities/base.entity';
 import { differenceInDays } from 'date-fns';
-import { Doctor } from 'modules/doctor/entities/doctor.entity';
-import { Nurse } from 'modules/nurse/entities/nurse.entity';
-import { User } from 'modules/user/entities/user.entity';
-import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Doctor } from '../../doctor/entities/doctor.entity';
+import { Nurse } from '../../nurse/entities/nurse.entity';
+import { User } from '../../user/entities/user.entity';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { EmployeeDepartment } from '../enums/employee-department.enum';
 
 @Entity('Employee')
@@ -39,8 +45,9 @@ export class Employee extends BaseEntity {
 
   @Expose()
   get employmentDuration(): string {
-
-    const laterDate = this.retirementDate ? new Date(this.retirementDate) : new Date();
+    const laterDate = this.retirementDate
+      ? new Date(this.retirementDate)
+      : new Date();
     const days = differenceInDays(laterDate, this.startDate);
 
     const years = Math.floor(days / 365);

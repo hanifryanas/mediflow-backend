@@ -1,8 +1,13 @@
-import { BadRequestException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { compareSync } from 'bcryptjs';
-import { LoginDataDto } from 'modules/auth/dtos/login-data.dto';
-import { LoginDto } from 'modules/auth/dtos/login.dto';
+import { LoginDataDto } from '../../auth/dtos/login-data.dto';
+import { LoginDto } from '../../auth/dtos/login.dto';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from '../dtos/create-user-dto';
 import { UpdateUserDto } from '../dtos/update-user-dto';
@@ -14,7 +19,7 @@ export class UserService {
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
-  ) { }
+  ) {}
 
   async findAll(): Promise<User[]> {
     return await this.userRepository.find();
@@ -24,8 +29,14 @@ export class UserService {
     return await this.userRepository.findBy(partialUser);
   }
 
-  async findOneBy(partialUser: Partial<User>, selection?: (keyof User)[]): Promise<User> {
-    const user = await this.userRepository.findOne({ where: partialUser, select: selection });
+  async findOneBy(
+    partialUser: Partial<User>,
+    selection?: (keyof User)[],
+  ): Promise<User> {
+    const user = await this.userRepository.findOne({
+      where: partialUser,
+      select: selection,
+    });
 
     if (!user) {
       throw new NotFoundException(`User not found`);
@@ -34,33 +45,44 @@ export class UserService {
     return user;
   }
 
-  async findOneByEmailOrUsername(identifier: string, selection?: (keyof User)[]): Promise<User> {
+  async findOneByEmailOrUsername(
+    identifier: string,
+    selection?: (keyof User)[],
+  ): Promise<User> {
     const user = await this.userRepository.findOne({
-      where: [
-        { email: identifier },
-        { userName: identifier },
-      ],
+      where: [{ email: identifier }, { userName: identifier }],
       select: selection,
     });
 
     if (!user) {
-      throw new NotFoundException(`User with email or username ${identifier} not found`);
+      throw new NotFoundException(
+        `User with email or username ${identifier} not found`,
+      );
     }
 
     return user;
   }
 
   async validateUserCredential(loginDto: LoginDto): Promise<LoginDataDto> {
-    const user = await this.findOneByEmailOrUsername(loginDto.emailOrUsername, ['userId', 'userName', 'password', 'role']);
+    const user = await this.findOneByEmailOrUsername(loginDto.emailOrUsername, [
+      'userId',
+      'userName',
+      'password',
+      'role',
+    ]);
 
     if (!user) {
-      throw new UnauthorizedException(`User with email or username ${loginDto.emailOrUsername} is not registered`);
+      throw new UnauthorizedException(
+        `User with email or username ${loginDto.emailOrUsername} is not registered`,
+      );
     }
 
     const isPasswordValid = compareSync(loginDto.password, user?.password);
 
     if (!isPasswordValid) {
-      throw new UnauthorizedException(`Invalid password for user ${loginDto.emailOrUsername}`);
+      throw new UnauthorizedException(
+        `Invalid password for user ${loginDto.emailOrUsername}`,
+      );
     }
 
     const loginData: LoginDataDto = {
@@ -96,7 +118,9 @@ export class UserService {
     const result = await this.userRepository.update(userId, { role });
 
     if (!result.affected) {
-      throw new BadRequestException(`Failed to update user role for ID ${userId}`);
+      throw new BadRequestException(
+        `Failed to update user role for ID ${userId}`,
+      );
     }
   }
 

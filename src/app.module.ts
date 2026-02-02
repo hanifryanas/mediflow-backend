@@ -1,19 +1,18 @@
-
 import { ClassSerializerInterceptor, Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_GUARD, APP_INTERCEPTOR, Reflector } from '@nestjs/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { JwtAuthGuard } from 'common/guards/jwt.guard';
-import { RequiredRoleGuard } from 'common/guards/required-role.guard';
-import { databaseConfig, tokenConfig } from 'config';
-import { PatientModule } from 'modules/patient/patient.module';
-import { UserModule } from 'modules/user/user.module';
+import { JwtAuthGuard } from './common/guards/jwt.guard';
+import { RequiredRoleGuard } from './common/guards/required-role.guard';
+import { PatientModule } from './modules/patient/patient.module';
+import { UserModule } from './modules/user/user.module';
 import { join } from 'path';
 import { AuthModule } from './modules/auth/auth.module';
 import { DoctorModule } from './modules/doctor/doctor.module';
 import { EmployeeModule } from './modules/employee/employee.module';
 import { NurseModule } from './modules/nurse/nurse.module';
 import { AppointmentModule } from './modules/appointment/appointment.module';
+import { databaseConfig, tokenConfig } from './config';
 
 @Module({
   providers: [
@@ -29,15 +28,14 @@ import { AppointmentModule } from './modules/appointment/appointment.module';
       provide: APP_INTERCEPTOR,
       inject: [Reflector],
       useFactory: (reflector: Reflector) =>
-        new ClassSerializerInterceptor(reflector /*, { excludeExtraneousValues: true } */),
+        new ClassSerializerInterceptor(
+          reflector /*, { excludeExtraneousValues: true } */,
+        ),
     },
   ],
   imports: [
     ConfigModule.forRoot({
-      load: [
-        databaseConfig,
-        tokenConfig,
-      ],
+      load: [databaseConfig, tokenConfig],
       cache: true,
     }),
     TypeOrmModule.forRootAsync({
@@ -64,4 +62,4 @@ import { AppointmentModule } from './modules/appointment/appointment.module';
     AppointmentModule,
   ],
 })
-export class AppModule { }
+export class AppModule {}

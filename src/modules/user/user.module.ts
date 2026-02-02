@@ -13,7 +13,7 @@ import { UserService } from './services/user.service';
     TypeOrmModule.forFeature([User, UserToken]),
     JwtModule.registerAsync({
       imports: [ConfigModule],
-      useFactory: async (configService: ConfigService) => ({
+      useFactory: (configService: ConfigService) => ({
         secret: configService.get<string>('token.accessTokenSecret'),
         signOptions: {
           expiresIn: `${configService.get<number>('token.accessTokenExpiration')}h`,
@@ -26,4 +26,4 @@ import { UserService } from './services/user.service';
   controllers: [UserController],
   exports: [UserService, UserTokenService],
 })
-export class UserModule { }
+export class UserModule {}

@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Employee } from 'modules/employee/entities/employee.entity';
-import { EmployeeService } from 'modules/employee/services/employee.service';
-import { User } from 'modules/user/entities/user.entity';
+import { Employee } from '../employee/entities/employee.entity';
+import { EmployeeService } from '../employee/services/employee.service';
+import { User } from '../user/entities/user.entity';
 import { NurseScheduleController } from './controllers/nurse-schedule.controller';
 import { NurseController } from './controllers/nurse.controller';
 import { NurseSchedule } from './entities/nurse-schedule.entity';
@@ -15,4 +15,4 @@ import { NurseService } from './services/nurse.service';
   providers: [NurseService, NurseScheduleService, EmployeeService],
   controllers: [NurseController, NurseScheduleController],
 })
-export class NurseModule { }
+export class NurseModule {}

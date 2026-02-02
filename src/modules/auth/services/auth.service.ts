@@ -1,12 +1,12 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { LoginDataDto } from 'modules/auth/dtos/login-data.dto';
-import { LoginDto } from 'modules/auth/dtos/login.dto';
-import { CreateUserDto } from 'modules/user/dtos/create-user-dto';
-import { User } from 'modules/user/entities/user.entity';
-import { UserTokenType } from 'modules/user/enums/user-token.enum';
-import { UserTokenService } from 'modules/user/services/user-token.service';
-import { UserService } from 'modules/user/services/user.service';
+import { LoginDataDto } from '../dtos/login-data.dto';
+import { LoginDto } from '../dtos/login.dto';
+import { CreateUserDto } from '../../user/dtos/create-user-dto';
+import { User } from '../../user/entities/user.entity';
+import { UserTokenType } from '../../user/enums/user-token.enum';
+import { UserTokenService } from '../../user/services/user-token.service';
+import { UserService } from '../../user/services/user.service';
 
 @Injectable()
 export class AuthService {
@@ -14,10 +14,11 @@ export class AuthService {
     private readonly jwtService: JwtService,
     private readonly userService: UserService,
     private readonly userTokenService: UserTokenService,
-  ) { }
+  ) {}
 
   async login(loginDto: LoginDto): Promise<LoginDataDto> {
-    const validatedUser = await this.userService.validateUserCredential(loginDto);
+    const validatedUser =
+      await this.userService.validateUserCredential(loginDto);
 
     const createdAccessToken = this.jwtService.sign(validatedUser);
 
@@ -53,6 +54,9 @@ export class AuthService {
   }
 
   async logout(userId: string): Promise<void> {
-    await this.userTokenService.removeTokensByUserId(userId, UserTokenType.RefreshToken);
+    await this.userTokenService.removeTokensByUserId(
+      userId,
+      UserTokenType.RefreshToken,
+    );
   }
 }

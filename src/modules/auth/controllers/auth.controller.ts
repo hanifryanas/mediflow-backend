@@ -1,13 +1,14 @@
 import { Body, Controller, Get, Post, Put, Req } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { Public } from 'common/decorators/public.decorator';
-import { LoginDataDto } from 'modules/auth/dtos/login-data.dto';
-import { LoginDto } from 'modules/auth/dtos/login.dto';
-import { CreateUserDto } from 'modules/user/dtos/create-user-dto';
-import { UpdateUserDto } from 'modules/user/dtos/update-user-dto';
-import { User } from 'modules/user/entities/user.entity';
-import { UserService } from 'modules/user/services/user.service';
+import { Public } from '../../../common/decorators/public.decorator';
+import { LoginDataDto } from '../dtos/login-data.dto';
+import { LoginDto } from '../dtos/login.dto';
+import { CreateUserDto } from '../../user/dtos/create-user-dto';
+import { UpdateUserDto } from '../../user/dtos/update-user-dto';
+import { User } from '../../user/entities/user.entity';
+import { UserService } from '../../user/services/user.service';
 import { AuthService } from '../services/auth.service';
+import { AuthenticatedRequest } from '../../../common/interfaces/authenticated-request.interface';
 
 @Controller('auth')
 @ApiTags('Auth')
@@ -15,7 +16,7 @@ export class AuthController {
   constructor(
     private readonly authService: AuthService,
     private readonly userService: UserService,
-  ) { }
+  ) {}
 
   @Public()
   @Post('/signup')
@@ -31,22 +32,37 @@ export class AuthController {
 
   @ApiBearerAuth()
   @Get('/me')
-  async getProfile(@Req() req): Promise<User> {
-    const userId = req.user.userId;
+  async getProfile(@Req() req: AuthenticatedRequest): Promise<User> {
+    const userId = req.user?.userId;
+    if (!userId) {
+      throw new Error('User ID not found in request');
+    }
+
     return this.authService.me(userId);
   }
 
   @ApiBearerAuth()
   @Put('/me')
-  async updateProfile(@Req() req, @Body() updateUserDto: UpdateUserDto): Promise<void> {
-    const userId = req.user.userId;
+  async updateProfile(
+    @Req() req: AuthenticatedRequest,
+    @Body() updateUserDto: UpdateUserDto,
+  ): Promise<void> {
+    const userId = req.user?.userId;
+    if (!userId) {
+      throw new Error('User ID not found in request');
+    }
+
     return this.userService.update(userId, updateUserDto);
   }
 
   @ApiBearerAuth()
   @Post('/logout')
-  async logout(@Req() req): Promise<void> {
-    const userId = req.user.userId;
+  async logout(@Req() req: AuthenticatedRequest): Promise<void> {
+    const userId = req.user?.userId;
+    if (!userId) {
+      throw new Error('User ID not found in request');
+    }
+
     return this.authService.logout(userId);
   }
 }

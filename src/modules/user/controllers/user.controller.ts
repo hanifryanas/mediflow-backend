@@ -1,6 +1,15 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+  Query,
+} from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { RequiredRole } from 'common/decorators/required-role.decorator';
+import { RequiredRole } from '../../../common/decorators/required-role.decorator';
 import { CreateUserDto } from '../dtos/create-user-dto';
 import { FilterUserDto } from '../dtos/filter-user.dto';
 import { UpdateUserDto } from '../dtos/update-user-dto';
@@ -8,15 +17,12 @@ import { User } from '../entities/user.entity';
 import { UserRole } from '../enums/user-role.enum';
 import { UserService } from '../services/user.service';
 
-
 @Controller('users')
 @ApiTags('User')
 @ApiBearerAuth()
 @RequiredRole(UserRole.Staff)
 export class UserController {
-  constructor(
-    private readonly userService: UserService,
-  ) { }
+  constructor(private readonly userService: UserService) {}
 
   @Get()
   async findAll(@Query() query: FilterUserDto): Promise<User[]> {
@@ -38,7 +44,10 @@ export class UserController {
   }
 
   @Put(':userId')
-  async update(@Param('userId') userId: string, @Body() updateUserDto: UpdateUserDto): Promise<void> {
+  async update(
+    @Param('userId') userId: string,
+    @Body() updateUserDto: UpdateUserDto,
+  ): Promise<void> {
     await this.userService.update(userId, updateUserDto);
   }
 

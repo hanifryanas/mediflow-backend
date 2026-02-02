@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsEnum, IsNotEmpty, IsString } from 'class-validator';
 import { formatDate } from 'date-fns';
-import { UserRole } from 'modules/user/enums/user-role.enum';
+import { UserRole } from '../../user/enums/user-role.enum';
 import { EmployeeDepartment } from '../enums/employee-department.enum';
 
 export class CreateEmployeeDto {

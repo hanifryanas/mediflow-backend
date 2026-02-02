@@ -1,11 +1,11 @@
 import { faker } from '@faker-js/faker';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Employee } from 'modules/employee/entities/employee.entity';
-import { EmployeeDepartment } from 'modules/employee/enums/employee-department.enum';
-import { User } from 'modules/user/entities/user.entity';
-import { UserGenderType } from 'modules/user/enums/user-gender.enum';
-import { UserRole } from 'modules/user/enums/user-role.enum';
+import { Employee } from '../../modules/employee/entities/employee.entity';
+import { EmployeeDepartment } from '../../modules/employee/enums/employee-department.enum';
+import { User } from '../../modules/user/entities/user.entity';
+import { UserGenderType } from '../../modules/user/enums/user-gender.enum';
+import { UserRole } from '../../modules/user/enums/user-role.enum';
 import { Seeder } from 'nestjs-seeder';
 import { Repository } from 'typeorm';
 
@@ -22,17 +22,19 @@ export class UserSuperAdminSeeder implements Seeder {
     role: UserRole.SuperAdmin,
     phoneNumber: `628${faker.string.numeric(10)}`,
     dateOfBirth: faker.date.birthdate({ min: 1970, max: 2000, mode: 'year' }),
-  }
+  };
 
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
     @InjectRepository(Employee)
     private readonly employeeRepository: Repository<Employee>,
-  ) { }
+  ) {}
 
   async seed() {
-    const existingSuperAdminUser = await this.userRepository.findOne({ where: { userName: this.superAdminUser.userName } });
+    const existingSuperAdminUser = await this.userRepository.findOne({
+      where: { userName: this.superAdminUser.userName },
+    });
     if (existingSuperAdminUser) return;
 
     const user = this.userRepository.create(this.superAdminUser);
@@ -41,14 +43,16 @@ export class UserSuperAdminSeeder implements Seeder {
     const superAdminEmployee: Partial<Employee> = {
       user: createdUser,
       startDate: new Date(),
-      department: EmployeeDepartment.BackOffice
-    }
+      department: EmployeeDepartment.BackOffice,
+    };
 
     const employee = this.employeeRepository.create(superAdminEmployee);
     await this.employeeRepository.save(employee);
   }
 
   async drop() {
-    await this.userRepository.delete({ userName: this.superAdminUser.userName });
+    await this.userRepository.delete({
+      userName: this.superAdminUser.userName,
+    });
   }
 }

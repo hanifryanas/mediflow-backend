@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { User } from 'modules/user/entities/user.entity';
-import { UserService } from 'modules/user/services/user.service';
+import { User } from '../user/entities/user.entity';
+import { UserService } from '../user/services/user.service';
 import { PatientInsuranceController } from './controllers/patient-insurance.controller';
 import { PatientController } from './controllers/patient.controller';
 import { PatientInsurance } from './entities/patient-insurance.entity';
@@ -15,4 +15,4 @@ import { PatientService } from './services/patient.service';
   providers: [PatientService, PatientInsuranceService, UserService],
   exports: [PatientService, PatientInsuranceService],
 })
-export class PatientModule { }
+export class PatientModule {}

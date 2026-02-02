@@ -1,19 +1,27 @@
-import { Body, Controller, Delete, Get, Param, Put, Query, Req } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Put,
+  Query,
+  Req,
+} from '@nestjs/common';
 import { ApiBearerAuth, ApiQuery, ApiTags } from '@nestjs/swagger';
-import { RequiredRole } from 'common/decorators/required-role.decorator';
-import { UserRole } from 'modules/user/enums/user-role.enum';
+import { RequiredRole } from '../../../common/decorators/required-role.decorator';
+import { UserRole } from '../../user/enums/user-role.enum';
 import { FilterNurseScheduleDto } from '../dtos/filter-nurse-schedule.dto';
 import { UpsertNurseScheduleDto } from '../dtos/upsert-nurse-schedule.dto';
 import { NurseSchedule } from '../entities/nurse-schedule.entity';
 import { NurseScheduleService } from '../services/nurse-schedule.service';
+import { AuthenticatedRequest } from '../../../common/interfaces/authenticated-request.interface';
 
 @Controller('nurses/schedules')
 @ApiTags('Nurse-Schedule')
 @ApiBearerAuth()
 export class NurseScheduleController {
-  constructor(
-    private readonly nurseScheduleService: NurseScheduleService,
-  ) { }
+  constructor(private readonly nurseScheduleService: NurseScheduleService) {}
 
   @RequiredRole(UserRole.User)
   @Get()
@@ -21,22 +29,35 @@ export class NurseScheduleController {
   @ApiQuery({ name: 'day', required: false, type: String })
   @ApiQuery({ name: 'startTime', required: false, type: String })
   @ApiQuery({ name: 'endTime', required: false, type: String })
-  async findAll(@Query() filterNurseScheduleDto: FilterNurseScheduleDto): Promise<NurseSchedule[]> {
+  async findAll(
+    @Query() filterNurseScheduleDto: FilterNurseScheduleDto,
+  ): Promise<NurseSchedule[]> {
     return this.nurseScheduleService.findBy(filterNurseScheduleDto);
   }
 
   @RequiredRole(UserRole.Admin)
   @Put()
-  async update(@Body() upsertNurseScheduleDto: UpsertNurseScheduleDto): Promise<void> {
+  async update(
+    @Body() upsertNurseScheduleDto: UpsertNurseScheduleDto,
+  ): Promise<void> {
     return await this.nurseScheduleService.upsert(upsertNurseScheduleDto);
   }
 
   @RequiredRole(UserRole.Staff)
   @Put('me')
-  async updateMe(@Req() req: any, @Body() upsertNurseScheduleDto: UpsertNurseScheduleDto): Promise<void> {
-    const userId = req.user.userId as string;
+  async updateMe(
+    @Req() req: AuthenticatedRequest,
+    @Body() upsertNurseScheduleDto: UpsertNurseScheduleDto,
+  ): Promise<void> {
+    const userId = req.user?.userId;
+    if (!userId) {
+      throw new Error('User ID not found in request');
+    }
 
-    return await this.nurseScheduleService.upsertByUserId(userId, upsertNurseScheduleDto);
+    return await this.nurseScheduleService.upsertByUserId(
+      userId,
+      upsertNurseScheduleDto,
+    );
   }
 
   @RequiredRole(UserRole.Admin)
@@ -48,7 +69,9 @@ export class NurseScheduleController {
 
   @RequiredRole(UserRole.Admin)
   @Delete(':nurseScheduleId')
-  async deleteById(@Param('nurseScheduleId') nurseScheduleId: number): Promise<void> {
+  async deleteById(
+    @Param('nurseScheduleId') nurseScheduleId: number,
+  ): Promise<void> {
     return await this.nurseScheduleService.delete(nurseScheduleId);
   }
 }

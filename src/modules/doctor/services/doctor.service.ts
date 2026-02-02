@@ -1,6 +1,10 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { EmployeeService } from 'modules/employee/services/employee.service';
+import { EmployeeService } from '../../employee/services/employee.service';
 import { Repository } from 'typeorm';
 import { CreateDoctorDto } from '../dtos/create-doctor.dto';
 import { UpdateDoctorDto } from '../dtos/update-doctor.dto';
@@ -12,7 +16,7 @@ export class DoctorService {
     @InjectRepository(Doctor)
     private readonly doctorRepository: Repository<Doctor>,
     private readonly employeeService: EmployeeService,
-  ) { }
+  ) {}
 
   async findById(doctorId: string): Promise<Doctor> {
     const doctor = await this.doctorRepository.findOne({ where: { doctorId } });
@@ -35,7 +39,9 @@ export class DoctorService {
     });
 
     if (!doctor) {
-      throw new NotFoundException(`Doctor with Employee ID ${employeeId} not found`);
+      throw new NotFoundException(
+        `Doctor with Employee ID ${employeeId} not found`,
+      );
     }
 
     return doctor;
@@ -60,7 +66,11 @@ export class DoctorService {
     return doctor;
   }
 
-  async findAll(key?: keyof Doctor, value?: Doctor[keyof Doctor], selection?: (keyof Doctor)[]): Promise<Doctor[]> {
+  async findAll(
+    key?: keyof Doctor,
+    value?: Doctor[keyof Doctor],
+    selection?: (keyof Doctor)[],
+  ): Promise<Doctor[]> {
     if (key && value) {
       return await this.doctorRepository.find({
         where: { [key]: value },
@@ -76,12 +86,15 @@ export class DoctorService {
   }
 
   async create(createDoctorDto: CreateDoctorDto): Promise<string> {
-    const { title, ...employeeData } = createDoctorDto;
+    const { ...employeeData } = createDoctorDto;
 
     let currentEmployeeId: string | undefined = undefined;
 
     if (employeeData.userId) {
-      const currentEmployee = await this.employeeService.findOneByUserId(employeeData.userId, ['employeeId']);
+      const currentEmployee = await this.employeeService.findOneByUserId(
+        employeeData.userId,
+        ['employeeId'],
+      );
       currentEmployeeId = currentEmployee.employeeId;
     } else {
       currentEmployeeId = await this.employeeService.create(employeeData);
@@ -105,7 +118,10 @@ export class DoctorService {
     return createdDoctor.doctorId;
   }
 
-  async update(doctorId: string, updateDoctorDto: UpdateDoctorDto): Promise<void> {
+  async update(
+    doctorId: string,
+    updateDoctorDto: UpdateDoctorDto,
+  ): Promise<void> {
     const doctor = await this.findById(doctorId);
 
     if (!doctor) {
@@ -129,7 +145,9 @@ export class DoctorService {
     const doctor = await this.findByEmployeeId(employeeId);
 
     if (!doctor) {
-      throw new NotFoundException(`Doctor with Employee ID ${employeeId} not found`);
+      throw new NotFoundException(
+        `Doctor with Employee ID ${employeeId} not found`,
+      );
     }
 
     await this.doctorRepository.remove(doctor);

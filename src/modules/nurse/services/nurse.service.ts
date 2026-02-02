@@ -1,6 +1,10 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { EmployeeService } from 'modules/employee/services/employee.service';
+import { EmployeeService } from '../../employee/services/employee.service';
 import { Repository } from 'typeorm';
 import { CreateNurseDto } from '../dtos/create-nurse.dto';
 import { UpdateNurseDto } from '../dtos/update-nurse.dto';
@@ -12,7 +16,7 @@ export class NurseService {
     @InjectRepository(Nurse)
     private readonly nurseRepository: Repository<Nurse>,
     private readonly employeeService: EmployeeService,
-  ) { }
+  ) {}
 
   async findById(nurseId: string): Promise<Nurse> {
     const nurse = await this.nurseRepository.findOne({ where: { nurseId } });
@@ -35,7 +39,9 @@ export class NurseService {
     });
 
     if (!nurse) {
-      throw new NotFoundException(`Nurse with employee ID ${employeeId} not found`);
+      throw new NotFoundException(
+        `Nurse with employee ID ${employeeId} not found`,
+      );
     }
 
     return nurse;
@@ -60,7 +66,11 @@ export class NurseService {
     return nurse;
   }
 
-  async findAll(key?: keyof Nurse, value?: Nurse[keyof Nurse], selection?: (keyof Nurse)[]): Promise<Nurse[]> {
+  async findAll(
+    key?: keyof Nurse,
+    value?: Nurse[keyof Nurse],
+    selection?: (keyof Nurse)[],
+  ): Promise<Nurse[]> {
     if (key && value) {
       return await this.nurseRepository.find({
         where: { [key]: value },
@@ -80,7 +90,10 @@ export class NurseService {
     let currentEmployeeId: string | undefined = undefined;
 
     if (employeeData.userId) {
-      const currentEmployee = await this.employeeService.findOneByUserId(employeeData.userId, ['employeeId']);
+      const currentEmployee = await this.employeeService.findOneByUserId(
+        employeeData.userId,
+        ['employeeId'],
+      );
       currentEmployeeId = currentEmployee.employeeId;
     } else {
       currentEmployeeId = await this.employeeService.create(employeeData);
@@ -128,7 +141,9 @@ export class NurseService {
     const nurse = await this.findByEmployeeId(employeeId);
 
     if (!nurse) {
-      throw new NotFoundException(`Nurse with Employee ID ${employeeId} not found`);
+      throw new NotFoundException(
+        `Nurse with Employee ID ${employeeId} not found`,
+      );
     }
 
     await this.nurseRepository.remove(nurse);

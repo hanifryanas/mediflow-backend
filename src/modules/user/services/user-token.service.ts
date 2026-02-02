@@ -12,7 +12,7 @@ export class UserTokenService {
     private readonly jwtService: JwtService,
     @InjectRepository(UserToken)
     private readonly userTokenRepository: Repository<UserToken>,
-  ) { }
+  ) {}
 
   private getRefreshTokenOptions(): JwtSignOptions {
     return {
@@ -32,7 +32,7 @@ export class UserTokenService {
 
     const generatedRefreshToken = this.jwtService.sign(
       { userId },
-      tokenOptions
+      tokenOptions,
     );
 
     const userToken = this.userTokenRepository.create({
@@ -45,7 +45,13 @@ export class UserTokenService {
     return await this.userTokenRepository.save(userToken);
   }
 
-  async removeTokensByUserId(userId: string, tokenType: UserTokenType): Promise<void> {
-    await this.userTokenRepository.delete({ user: { userId }, type: tokenType });
+  async removeTokensByUserId(
+    userId: string,
+    tokenType: UserTokenType,
+  ): Promise<void> {
+    await this.userTokenRepository.delete({
+      user: { userId },
+      type: tokenType,
+    });
   }
 }

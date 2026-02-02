@@ -1,17 +1,31 @@
 import { faker } from '@faker-js/faker';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsDate, IsEnum, IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import {
+  IsDate,
+  IsEnum,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+} from 'class-validator';
 import { User } from '../entities/user.entity';
 import { UserGenderType } from '../enums/user-gender.enum';
 
-const exampleGender = faker.helpers.arrayElement(Object.values(UserGenderType)) as UserGenderType;
+const exampleGender = faker.helpers.arrayElement(
+  Object.values(UserGenderType),
+) as UserGenderType;
 const exampleIdentityNumber = faker.string.numeric(16);
 const exampleFirstName = faker.person.firstName(exampleGender);
 const exampleLastName = faker.person.lastName(exampleGender);
 const exampleUserName = `${exampleFirstName}${exampleLastName}`.toLowerCase();
 const exampleEmail = `${exampleUserName}@mail.com`;
-const examplePassword = faker.helpers.arrayElement(['1', '2', '3', '4', '5', '6', '7', '8', '9', '0']).repeat(8);
-const exampleDateOfBirth = faker.date.birthdate({ min: 1959, max: 2006, mode: 'year' });
+const examplePassword = faker.helpers
+  .arrayElement(['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'])
+  .repeat(8);
+const exampleDateOfBirth = faker.date.birthdate({
+  min: 1959,
+  max: 2006,
+  mode: 'year',
+});
 const examplePhoneNumber = `62${faker.phone.number().replace(/\D/g, '').slice(0, 10)}`;
 const exampleAddress = faker.location.streetAddress();
 

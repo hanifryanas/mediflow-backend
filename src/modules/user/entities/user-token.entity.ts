@@ -1,7 +1,13 @@
-import { BaseEntity } from 'common/entities/base.entity';
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { UserTokenType } from '../enums/user-token.enum';
 import { User } from './user.entity';
+import { BaseEntity } from '../../../common/entities/base.entity';
 
 @Entity('UserToken')
 export class UserToken extends BaseEntity {
@@ -9,7 +15,7 @@ export class UserToken extends BaseEntity {
   userTokenId: string;
 
   @Column()
-  token: string
+  token: string;
 
   @Column({ type: 'enum', enum: UserTokenType })
   type: UserTokenType;

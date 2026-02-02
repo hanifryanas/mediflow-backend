@@ -1,5 +1,5 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
-import { FilterUserDto } from 'modules/user/dtos/filter-user.dto';
+import { FilterUserDto } from '../../user/dtos/filter-user.dto';
 
 export class FilterEmployeeDto extends FilterUserDto {
   @ApiPropertyOptional({

@@ -1,12 +1,22 @@
-import { Body, Controller, Delete, Get, Param, Post, Query, Req } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Query,
+  Req,
+} from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { RequiredRole } from 'common/decorators/required-role.decorator';
-import { UserRole } from 'modules/user/enums/user-role.enum';
-import { UserService } from 'modules/user/services/user.service';
+import { RequiredRole } from '../../../common/decorators/required-role.decorator';
+import { UserRole } from '../../user/enums/user-role.enum';
+import { UserService } from '../../user/services/user.service';
 import { CreatePatientDto } from '../dtos/create-patient.dto';
 import { FilterPatientDto } from '../dtos/filter-patient.dto';
 import { Patient } from '../entities/patient.entity';
 import { PatientService } from '../services/patient.service';
+import { AuthenticatedRequest } from '../../../common/interfaces/authenticated-request.interface';
 
 @Controller('patients')
 @ApiTags('Patient')
@@ -15,7 +25,7 @@ export class PatientController {
   constructor(
     private readonly patientService: PatientService,
     private readonly userService: UserService,
-  ) { }
+  ) {}
 
   @RequiredRole(UserRole.Staff)
   @Get()
@@ -31,14 +41,20 @@ export class PatientController {
 
   @RequiredRole(UserRole.User)
   @Get('me')
-  async findByMe(@Req() req: any): Promise<Patient> {
-    const userId = req.user.userId as string;
+  async findByMe(@Req() req: AuthenticatedRequest): Promise<Patient> {
+    const userId = req.user?.userId;
+    if (!userId) {
+      throw new Error('User ID not found in request');
+    }
+
     return await this.patientService.findOneByUserId(userId);
   }
 
   @Post()
   async create(@Body() createPatientDto: CreatePatientDto): Promise<string> {
-    const user = await this.userService.findOneBy({ userId: createPatientDto.userId });
+    const user = await this.userService.findOneBy({
+      userId: createPatientDto.userId,
+    });
 
     const createPatient = {
       ...createPatientDto,

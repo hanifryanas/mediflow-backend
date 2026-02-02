@@ -8,7 +8,7 @@ export class PatientService {
   constructor(
     @InjectRepository(Patient)
     private readonly patientRepository: Repository<Patient>,
-  ) { }
+  ) {}
 
   async findAll(): Promise<Patient[]> {
     return await this.patientRepository.find({ relations: ['user'] });
@@ -31,18 +31,25 @@ export class PatientService {
     });
   }
 
-  async findOneBy(patientField: keyof Patient, patientValue: Patient[keyof Patient]): Promise<Patient> {
-    const patient = await this.patientRepository.findOneBy({ [patientField]: patientValue });
+  async findOneBy(
+    patientField: keyof Patient,
+    patientValue: Patient[keyof Patient],
+  ): Promise<Patient> {
+    const patient = await this.patientRepository.findOneBy({
+      [patientField]: patientValue,
+    });
 
     if (!patient) {
-      throw new NotFoundException(`Patient with ${patientField} ${patientValue} not found`);
+      throw new NotFoundException(`Patient with ${patientField} not found`);
     }
 
     return patient;
   }
 
   async findOneByUserId(userId: string): Promise<Patient> {
-    const patient = await this.patientRepository.findOneBy({ user: { userId } });
+    const patient = await this.patientRepository.findOneBy({
+      user: { userId },
+    });
 
     if (!patient) {
       throw new NotFoundException(`Patient with userId ${userId} not found`);
@@ -66,7 +73,9 @@ export class PatientService {
     const result = await this.patientRepository.delete(patientId);
 
     if (!result.affected) {
-      throw new BadRequestException(`Failed to delete patient with ID ${patientId}`);
+      throw new BadRequestException(
+        `Failed to delete patient with ID ${patientId}`,
+      );
     }
   }
 }

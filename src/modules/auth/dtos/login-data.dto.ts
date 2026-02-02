@@ -1,4 +1,4 @@
-import { UserRole } from 'modules/user/enums/user-role.enum';
+import { UserRole } from '../../user/enums/user-role.enum';
 
 export class LoginDataDto {
   userId: string;

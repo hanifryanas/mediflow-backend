@@ -14,5 +14,5 @@ export class CreatePatientInsuranceDto {
   @ApiProperty()
   @IsString()
   @IsNotEmpty()
-  policyNumber: string
+  policyNumber: string;
 }
