@@ -1,13 +1,13 @@
 import { faker } from '@faker-js/faker';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Seeder } from 'nestjs-seeder';
+import { Repository } from 'typeorm';
 import { PatientInsurance } from '../../modules/patient/entities/patient-insurance.entity';
 import { Patient } from '../../modules/patient/entities/patient.entity';
 import { InsuranceProviderType } from '../../modules/patient/enums/insurance-provider.enum';
 import { User } from '../../modules/user/entities/user.entity';
 import { UserGenderType } from '../../modules/user/enums/user-gender.enum';
-import { Seeder } from 'nestjs-seeder';
-import { Repository } from 'typeorm';
 
 @Injectable()
 export class PatientSeeder implements Seeder {
@@ -64,7 +64,8 @@ export class PatientSeeder implements Seeder {
 
     const createdPatientUsers = await Promise.all(
       this.generatedPatientUsers.map(
-        async (user) => await this.userRepository.save(user),
+        async (user) =>
+          await this.userRepository.save(this.userRepository.create(user)),
       ),
     );
     const createPatients: Partial<Patient>[] = createdPatientUsers.map(
@@ -88,7 +89,9 @@ export class PatientSeeder implements Seeder {
     await Promise.all(
       this.generatedPatientInsurances.map(
         async (insurance) =>
-          await this.patientInsuranceRepository.save(insurance),
+          await this.patientInsuranceRepository.save(
+            this.patientInsuranceRepository.create(insurance),
+          ),
       ),
     );
   }

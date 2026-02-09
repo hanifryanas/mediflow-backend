@@ -1,5 +1,7 @@
 import { faker } from '@faker-js/faker';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Seeder } from 'nestjs-seeder';
+import { Repository } from 'typeorm';
 import { Day } from '../../common/enums/day.enum';
 import { Employee } from '../../modules/employee/entities/employee.entity';
 import { EmployeeDepartment } from '../../modules/employee/enums/employee-department.enum';
@@ -8,8 +10,6 @@ import { Nurse } from '../../modules/nurse/entities/nurse.entity';
 import { User } from '../../modules/user/entities/user.entity';
 import { UserGenderType } from '../../modules/user/enums/user-gender.enum';
 import { UserRole } from '../../modules/user/enums/user-role.enum';
-import { Seeder } from 'nestjs-seeder';
-import { Repository } from 'typeorm';
 
 export class NurseSeeder implements Seeder {
   private generatedNurseUsers: Partial<User>[] = Array.from(
@@ -40,7 +40,7 @@ export class NurseSeeder implements Seeder {
 
   private generatedNurseEmployeeMap: Map<string, Partial<Employee>> = new Map(
     this.generatedNurseUsers.map((user) => [
-      user.userName!,
+      user.userName,
       {
         startDate: faker.date.past({ years: 5 }),
         department: faker.helpers.arrayElement(
@@ -76,7 +76,7 @@ export class NurseSeeder implements Seeder {
           });
         });
 
-        return [user.userName!, schedules];
+        return [user.userName, schedules];
       }),
     );
 
